@@ -21,14 +21,20 @@ public class OrdinaryBuyerView extends Views
 	private JTextField textField_1;
 	private JTextField textField_2;
 
-
-
 	/**
 	 * Create the frame.
 	 */
 	public OrdinaryBuyerView()
 	{
 		
+		setupBeginning();
+		addLogin();
+		addNormal();
+		
+	}
+	
+	void setupBeginning()
+	{
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
@@ -36,6 +42,11 @@ public class OrdinaryBuyerView extends Views
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
+
+	}
+	
+	void addLogin(){
+		
 		
 		textField = new JTextField();
 		textField.setBounds(314, 163, 130, 26);
@@ -72,7 +83,9 @@ public class OrdinaryBuyerView extends Views
 		});
 		btnNewButton_1.setBounds(355, 232, 89, 29);
 		contentPane.add(btnNewButton_1);
-		
+	}
+	
+	void addNormal() {
 		JLabel lblNewLabel_2 = new JLabel("Shopping Cart");
 		lblNewLabel_2.setBounds(63, 11, 111, 16);
 		contentPane.add(lblNewLabel_2);
@@ -125,7 +138,7 @@ public class OrdinaryBuyerView extends Views
 		});
 		btnNewButton_5.setBounds(288, 113, 117, 29);
 		contentPane.add(btnNewButton_5);
+		
 	}
-	
 	
 }
