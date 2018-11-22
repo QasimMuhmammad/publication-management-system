@@ -13,7 +13,8 @@ public class Client
 		try {
 			clientSocket = new Socket(servername,port);
 		} catch (IOException e) {
-			
+			System.err.println("Unable to connect to the server.");
+			e.printStackTrace();
 		}
 		
 		
