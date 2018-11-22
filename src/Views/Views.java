@@ -1,10 +1,11 @@
 package Views;
 
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 
-public abstract class Views
+public abstract class Views extends JFrame
 {
-	JFrame myFrame;
+	//JPanel contentPane;
 	
 	void chooseView(String userType)
 	{
@@ -13,13 +14,19 @@ public abstract class Views
 		case "OrdinaryBuyer":
 			
 			break;
-
 		case "RegisteredBuyer":
 			break;
 			
 		case "Opertor":
 			break;
 		}
+		
+	}
+	
+	public static void main(String[] args)
+	{
+		OrdinaryBuyerView myViews= new OrdinaryBuyerView();
+		myViews.setVisible(true);
 		
 	}
 }
