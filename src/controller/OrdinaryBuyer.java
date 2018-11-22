@@ -1,6 +1,6 @@
-package Frontend;
+package controller;
 
-public class OrdinaryBuyer
+class OrdinaryBuyer
 {
 	private String name;
 	private OrdinaryBuyerController myController;

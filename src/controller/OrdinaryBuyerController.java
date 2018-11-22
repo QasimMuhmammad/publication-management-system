@@ -1,9 +1,9 @@
-package Frontend;
+package controller;
 
 import java.util.ArrayList;
 
-import Views.OrdinaryView;
-import Views.Views;
+import Frontend.OrdinaryView;
+import Frontend.Views;
 
 public class OrdinaryBuyerController
 {
