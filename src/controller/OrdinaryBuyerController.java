@@ -2,7 +2,7 @@ package controller;
 
 import java.util.ArrayList;
 
-import Frontend.OrdinaryView;
+import Frontend.OrdinaryBuyerView;
 import Frontend.Views;
 
 public class OrdinaryBuyerController
@@ -13,7 +13,7 @@ public class OrdinaryBuyerController
 	
 	public OrdinaryBuyerController()
 	{
-		myViews = new OrdinaryView();
+		myViews = new OrdinaryBuyerView();
 	}
 	
 	
