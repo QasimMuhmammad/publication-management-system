@@ -1,3 +1,4 @@
+package controller;
 import java.io.IOException;
 import java.net.Socket;
 
@@ -18,6 +19,11 @@ public class Client
 		}
 		
 		
+	}
+	
+	public void func()
+	{
+		System.out.println("In Func");
 	}
 	
 	public static void main(String[] args)

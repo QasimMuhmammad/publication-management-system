@@ -1,4 +1,4 @@
-package Views;
+package Frontend;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;

@@ -1,4 +1,4 @@
-package Views;
+package Frontend;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
