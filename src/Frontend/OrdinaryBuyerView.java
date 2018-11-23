@@ -16,11 +16,16 @@ import java.awt.Color;
 
 public class OrdinaryBuyerView extends Views
 {
-	JPanel contentPane;
 	private JTextField textField;
 	private JTextField textField_1;
 	private JTextField textField_2;
-
+	private JButton loginButton;
+	private JButton RegisterButton;
+	private JButton removeButton;
+	private JButton makeOrderButton;
+	private JButton searchButton;
+	private JButton addToOrderButton;
+	
 	/**
 	 * Create the frame.
 	 */
@@ -66,23 +71,17 @@ public class OrdinaryBuyerView extends Views
 		lblNewLabel_1.setBounds(249, 199, 61, 16);
 		contentPane.add(lblNewLabel_1);
 		
+		
+		
 		// Login
-		JButton btnNewButton = new JButton("Login");
-		btnNewButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		btnNewButton.setBounds(267, 232, 89, 29);
-		contentPane.add(btnNewButton);
+		loginButton = new JButton("Login");
+		loginButton.setBounds(267, 232, 89, 29);
+		contentPane.add(loginButton);
 		
 		// Register Button
-		JButton btnNewButton_1 = new JButton("Register");
-		btnNewButton_1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		btnNewButton_1.setBounds(355, 232, 89, 29);
-		contentPane.add(btnNewButton_1);
+		RegisterButton = new JButton("Register");
+		RegisterButton.setBounds(355, 232, 89, 29);
+		contentPane.add(RegisterButton);
 	}
 	
 	void addNormal() {
@@ -91,22 +90,14 @@ public class OrdinaryBuyerView extends Views
 		contentPane.add(lblNewLabel_2);
 		
 		// Remove
-		JButton btnNewButton_2 = new JButton("Remove");
-		btnNewButton_2.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		btnNewButton_2.setBounds(6, 115, 100, 29);
-		contentPane.add(btnNewButton_2);
+		removeButton = new JButton("Remove");
+		removeButton.setBounds(6, 115, 100, 29);
+		contentPane.add(removeButton);
 		
 		// Make Order
-		JButton btnNewButton_3 = new JButton("Make Order");
-		btnNewButton_3.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		btnNewButton_3.setBounds(118, 115, 100, 29);
-		contentPane.add(btnNewButton_3);
+		makeOrderButton = new JButton("Make Order");
+		makeOrderButton.setBounds(118, 115, 100, 29);
+		contentPane.add(makeOrderButton);
 		
 		JList list = new JList();
 		list.setBounds(16, 33, 194, 68);
@@ -118,27 +109,64 @@ public class OrdinaryBuyerView extends Views
 		textField_2.setColumns(10);
 		
 		// Search Button
-		JButton btnNewButton_4 = new JButton("Search");
-		btnNewButton_4.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		btnNewButton_4.setBounds(233, 6, 77, 29);
-		contentPane.add(btnNewButton_4);
+		searchButton = new JButton("Search");
+		searchButton.setBounds(233, 6, 77, 29);
+		contentPane.add(searchButton);
 		
 		JList list_1 = new JList();
 		list_1.setBounds(243, 44, 201, 57);
 		contentPane.add(list_1);
 		
 		// Add to Order
-		JButton btnNewButton_5 = new JButton("Add to Order");
-		btnNewButton_5.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		btnNewButton_5.setBounds(288, 113, 117, 29);
-		contentPane.add(btnNewButton_5);
+		addToOrderButton = new JButton("Add to Order");
+		addToOrderButton.setBounds(288, 113, 117, 29);
+		contentPane.add(addToOrderButton);
 		
+	}
+	
+	public JButton getLoginButton()
+	{
+		return loginButton;
+	}
+	
+	public JButton getRegisterButton()
+	{
+		return RegisterButton;
+	}
+	
+	public JButton getRemoveButton()
+	{
+		return removeButton;
+	}
+	
+	public JButton getMakeOrderButton()
+	{
+		return makeOrderButton;
+	}
+	
+	public JButton getSearchButton()
+	{
+		return searchButton;
+	}
+	
+	public JButton getAddToOrderButton()
+	{
+		return addToOrderButton;
+	}
+	
+	public JTextField geTextField()
+	{
+		return textField;
+	}
+	
+	public JTextField geTextField1()
+	{
+		return textField_1;
+	}
+	
+	public JTextField geTextField2()
+	{
+		return textField_2;
 	}
 	
 }

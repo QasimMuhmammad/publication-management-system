@@ -5,7 +5,7 @@ import javax.swing.JPanel;
 
 public abstract class Views extends JFrame
 {
-	//JPanel contentPane;
+	JPanel contentPane;
 	
 	void chooseView(String userType)
 	{
