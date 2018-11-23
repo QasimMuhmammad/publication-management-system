@@ -17,12 +17,13 @@ public class OrdinaryBuyerController
 	public OrdinaryBuyerController()
 	{
 		myViews = new OrdinaryBuyerView();
-		registerOrdinaryBuyer();
+		loginOrdinaryBuyer();
+		BuyerListeners();
 		
 	}
 	
 	
-	void registerOrdinaryBuyer()
+	void loginOrdinaryBuyer()
 	{
 		myViews.getRegisterButton().addActionListener(new ActionListener()
 		{
@@ -34,6 +35,64 @@ public class OrdinaryBuyerController
 				
 			}
 		});;
+	
+		myViews.getLoginButton().addActionListener(new ActionListener()
+		{
+			
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				// TODO Auto-generated method stub
+				
+			}
+		});
+	}
+	
+	void BuyerListeners()
+	{
+		myViews.getSearchButton().addActionListener(new ActionListener()
+		{
+			
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		
+		myViews.getMakeOrderButton().addActionListener(new ActionListener()
+		{
+			
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				// TODO Auto-generated method stub
+				
+			}
+		});
+	
+		myViews.getAddToOrderButton().addActionListener(new ActionListener()
+		{
+			
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				// TODO Auto-generated method stub
+				
+			}
+		});
+	
+		myViews.getRemoveButton().addActionListener(new ActionListener()
+		{
+			
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				// TODO Auto-generated method stub
+				
+			}
+		});
 	}
 	
 	
