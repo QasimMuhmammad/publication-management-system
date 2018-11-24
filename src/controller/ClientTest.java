@@ -40,7 +40,6 @@ class ClientTest
 	void tearDown() throws Exception
 	{
 		client = null;
-
 	}
 
 	@AfterAll
@@ -56,5 +55,11 @@ class ClientTest
 		client.func();
 //		fail("Not yet implemented");
 	}
+	@Test
+	void stuff()
+	{
+		
+	}
+	
 
 }

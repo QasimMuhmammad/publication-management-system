@@ -8,13 +8,15 @@ import java.sql.SQLException;
 import java.util.Properties;
 import java.util.Vector;
 
-public class DatabaseController implements Database_Configuration, Schema_Login
+import backend.database.schema.Schema_Login;
+
+public class DatabaseEntity implements Database_Configuration, Schema_Login
 {
 	private Connection connection;
 	private Properties connectionProps;
 	private PreparedStatement preparedStatement;
 
-	public DatabaseController()
+	public DatabaseEntity()
 	{
 		connectionProps = new Properties();
 		connectionProps.put("user", DB_USERNAME);
@@ -29,10 +31,11 @@ public class DatabaseController implements Database_Configuration, Schema_Login
 
 		try
 		{
-			sql = "INSERT INTO " + LOGIN_TABLENAME + " VALUES" + "(?,?)";
+			sql = "INSERT INTO " + LOGIN_TABLENAME + " VALUES" + "(?,?,?)";
 			preparedStatement = connection.prepareStatement(sql);
-			preparedStatement.setString(1, username);
+			preparedStatement.setString(1, username.toLowerCase());
 			preparedStatement.setString(2, password);
+			preparedStatement.setInt(3, LOGIN_USERS.REGISTERED_BUYER.getId());
 			preparedStatement.executeUpdate();
 			
 			sql = "SELECT * FROM " + LOGIN_TABLENAME + " WHERE " 
@@ -62,17 +65,20 @@ public class DatabaseController implements Database_Configuration, Schema_Login
 		
 		try
 		{
-			sql = "SELECT " + LOGIN_USERNAME + " FROM " + LOGIN_TABLENAME + " WHERE " 
+			sql = "SELECT " + LOGIN_USERNAME + "," 
+					+ LOGIN_USERTYPE + " FROM " 
+					+ LOGIN_TABLENAME + " WHERE " 
 					+ LOGIN_USERNAME + "= ? AND " 
 					+ LOGIN_PASSWORD + "= ?;";
 			preparedStatement = connection.prepareStatement(sql);
-			preparedStatement.setString(1, username);
+			preparedStatement.setString(1, username.toLowerCase());
 			preparedStatement.setString(2, password);
 			ResultSet rSet = preparedStatement.executeQuery();
 			
 			while (rSet.next())
 			{
 				System.out.println("Authenticated User: " + rSet.getString(1));
+				System.out.println("Type: " + rSet.getInt(2));
 				return true;
 			}
 		} catch (SQLException e)
@@ -81,7 +87,6 @@ public class DatabaseController implements Database_Configuration, Schema_Login
 			e.printStackTrace();
 		}
 
-		
 		return false;
 	}
 
@@ -98,11 +103,6 @@ public class DatabaseController implements Database_Configuration, Schema_Login
 		}
 
 		prepareDatabase();
-	}
-
-	public void validateLogin(String username, String password)
-	{
-
 	}
 
 	public void disconnect()
@@ -187,15 +187,26 @@ public class DatabaseController implements Database_Configuration, Schema_Login
 	{
 		String sql, tableName;
 
-		tableName = "login";
+		tableName = LOGIN_TABLENAME;
 		sql = "CREATE TABLE " + tableName + "("
-				+ "USERNAME VARCHAR(50) NOT NULL, "
-				+ "PASSWORD VARCHAR(50) NOT NULL, "
-				+ "PRIMARY KEY ( USERNAME ) " + ")";
-
-		tableName = "document";
+				+ LOGIN_USERNAME + " VARCHAR(50) NOT NULL, "
+				+ LOGIN_PASSWORD + " VARCHAR(50) NOT NULL, "
+				+ LOGIN_USERTYPE + " INT(1) NOT NULL,"
+				+ "PRIMARY KEY ( " + LOGIN_USERNAME + " ) " + ")";
 
 		executeUpdate(sql);
+		
+		tableName = "";
+		sql = "CREATE TABLE " + tableName + "(";
+		
+		// TODO: create magazine table
+		// TODO: create journal table
+		// TODO: create book table
+//				+ LOGIN_USERNAME + " VARCHAR(50) NOT NULL, "
+//				+ LOGIN_PASSWORD + " VARCHAR(50) NOT NULL, "
+//				+ LOGIN_USERTYPE + " INT(1) NOT NULL,"
+//				+ "PRIMARY KEY ( " + LOGIN_USERNAME + " ) " + ")";
+		
 	}
 
 	private void populateDatabase()

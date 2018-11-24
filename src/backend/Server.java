@@ -4,7 +4,7 @@ import java.net.ServerSocket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import backend.database.DatabaseController;
+import backend.database.DatabaseEntity;
 
 public class Server
 {
@@ -20,7 +20,7 @@ public class Server
 	
 	private Thread socketAcceptor;
 	
-	private DatabaseController databaseController;
+	private DatabaseEntity databaseController;
 	
 	/**
 	 * Starts the server

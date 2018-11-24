@@ -6,7 +6,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-import backend.database.DatabaseController;
+import backend.database.DatabaseEntity;
 
 /**
  * Used by server to enable multi-threaded clients
@@ -32,7 +32,7 @@ public class ServerControl implements Runnable
 	 */
 	BufferedReader fromClient;
 	
-	private DatabaseController databaseController;
+	private DatabaseEntity databaseController;
 
 	/**
 	 * Initializes the Control object
@@ -40,7 +40,7 @@ public class ServerControl implements Runnable
 	 * @param toConnect
 	 *            connects the server to ClientGUI
 	 */
-	public ServerControl(Socket toConnect, DatabaseController db)
+	public ServerControl(Socket toConnect, DatabaseEntity db)
 	{
 		try
 		{

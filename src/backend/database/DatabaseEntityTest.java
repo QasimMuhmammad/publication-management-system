@@ -9,14 +9,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 
-class DatabaseControllerTest
+class DatabaseEntityTest
 {
-	static private DatabaseController db;
+	static private DatabaseEntity db;
 	
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception
 	{
-		db = new DatabaseController();
+		db = new DatabaseEntity();
 		db.connect();
 	}
 
