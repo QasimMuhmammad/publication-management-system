@@ -19,7 +19,7 @@ public class OrdinaryBuyerController
 		myViews = new OrdinaryBuyerView();
 		loginOrdinaryBuyer();
 		BuyerListeners();
-		
+		myViews.setVisible(true);
 	}
 	
 	
