@@ -6,6 +6,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
+import backend.database.DatabaseEntity;
+
 /**
  * Used by server to enable multi-threaded clients
  * 
@@ -29,6 +31,8 @@ public class ServerControl implements Runnable
 	 * Connects the reader to tell server when the client sends a message
 	 */
 	BufferedReader fromClient;
+	
+	private DatabaseEntity databaseController;
 
 	/**
 	 * Initializes the Control object
@@ -36,10 +40,11 @@ public class ServerControl implements Runnable
 	 * @param toConnect
 	 *            connects the server to ClientGUI
 	 */
-	public ServerControl(Socket toConnect)
+	public ServerControl(Socket toConnect, DatabaseEntity db)
 	{
 		try
 		{
+			databaseController = db;
 			outputMessage = new ObjectOutputStream(toConnect.getOutputStream());
 			inputMessage = new ObjectInputStream(toConnect.getInputStream());
 			fromClient = new BufferedReader(

@@ -4,6 +4,8 @@ import java.net.ServerSocket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import backend.database.DatabaseEntity;
+
 public class Server
 {
 	/**
@@ -17,7 +19,9 @@ public class Server
 	private ExecutorService pool;
 	
 	private Thread socketAcceptor;
-
+	
+	private DatabaseEntity databaseController;
+	
 	/**
 	 * Starts the server
 	 */
@@ -27,6 +31,7 @@ public class Server
 		{
 			serverSocket = new ServerSocket(port);
 			pool = Executors.newCachedThreadPool();
+			databaseController.connect();
 			System.out.println("Server set up");
 		} catch (IOException e)
 		{
@@ -51,7 +56,7 @@ public class Server
 					while (true)
 					{
 						ServerControl handleMessage = new ServerControl(
-								serverSocket.accept());
+								serverSocket.accept(), databaseController);
 						pool.execute(handleMessage);
 					}
 
@@ -67,6 +72,7 @@ public class Server
 	public void shutdown()
 	{
 		pool.shutdown();
+		databaseController.disconnect();
 	}
 
 	/**
