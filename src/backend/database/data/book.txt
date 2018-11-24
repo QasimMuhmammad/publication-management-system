@@ -1,0 +1,3 @@
+The Great Bill,Malleus Mallard,2018-11-23,2018-11-23,pdf,false,false,Non-fiction,123123
+Investogator,Stephanie Gool,2018-11-23,2018-11-23,pdf,true,true,Mystery,321321
+Remediatative Psychology,Marl Wells,2018-11-23,2018-11-23,pdf,true,false,Education,871234

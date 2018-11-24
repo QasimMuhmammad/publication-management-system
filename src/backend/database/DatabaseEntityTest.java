@@ -48,6 +48,8 @@ class DatabaseEntityTest
 		
 		boolean isValidLogin = db.login(username, password);
 		
+		
+		
 		//fail("Not yet implemented");
 	}
 
