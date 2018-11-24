@@ -44,13 +44,10 @@ class DatabaseEntityTest
 		username = "Paul";
 		password = "secure";
 		
+		System.out.println("In RegisterUser");
 		db.registerUser(username, password);
+		System.out.println("Valid Login!");
 		
-		boolean isValidLogin = db.login(username, password);
-		
-		
-		
-		//fail("Not yet implemented");
 	}
 
 }

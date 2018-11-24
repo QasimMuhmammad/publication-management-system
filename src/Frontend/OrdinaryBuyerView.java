@@ -10,8 +10,11 @@ import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
 import java.awt.event.ActionEvent;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
+
 import java.awt.Color;
 
 public class OrdinaryBuyerView extends Views
@@ -168,5 +171,12 @@ public class OrdinaryBuyerView extends Views
 	{
 		return textField_2;
 	}
+	
+	public void showLoginError()
+	{
+		JOptionPane.showMessageDialog(contentPane, "Incorrect username or password", "Login Failed", JOptionPane.ERROR_MESSAGE);
+		
+	}
+	
 	
 }

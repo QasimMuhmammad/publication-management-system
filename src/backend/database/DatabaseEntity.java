@@ -67,9 +67,10 @@ Schema_Book, Schema_Magazine, Schema_Journal
 		}
 	}
 	
-	public boolean login(String username, String password)
+	public String login(String username, String password)
 	{
 		String sql;
+		System.out.println("Attempting Login db");
 		
 		try
 		{
@@ -87,7 +88,7 @@ Schema_Book, Schema_Magazine, Schema_Journal
 			{
 				System.out.println("Authenticated User: " + rSet.getString(1));
 				System.out.println("Type: " + rSet.getInt(2));
-				return true;
+				return LOGIN_USER_REGISTERED_BUYER;
 			}
 		} catch (SQLException e)
 		{
@@ -95,7 +96,7 @@ Schema_Book, Schema_Magazine, Schema_Journal
 			e.printStackTrace();
 		}
 
-		return false;
+		return LOGIN_USER_FAIL;
 	}
 
 	public void connect()
@@ -166,7 +167,7 @@ Schema_Book, Schema_Magazine, Schema_Journal
 				executeUpdate("USE " + DB_NAME + ";");
 
 				createTables();
-				populateDatabase();
+				System.out.println("Populating DB");
 			}
 
 			preparedStatement = connection.prepareStatement("SHOW TABLES;");
@@ -178,6 +179,8 @@ Schema_Book, Schema_Magazine, Schema_Journal
 			{
 				System.out.println(rSet.getString(1));
 			}
+			
+			registerUser("hi", "bye");
 
 		} catch (SQLException e)
 		{
@@ -194,7 +197,8 @@ Schema_Book, Schema_Magazine, Schema_Journal
 	private void createTables()
 	{
 		String sql, tableName;
-
+		System.out.print("CREATING TABLES1");
+		
 		tableName = LOGIN_TABLENAME;
 		sql = "CREATE TABLE " + tableName + "("
 				+ LOGIN_USERNAME + " VARCHAR(50) NOT NULL, "
@@ -203,7 +207,9 @@ Schema_Book, Schema_Magazine, Schema_Journal
 				+ "PRIMARY KEY ( " + LOGIN_USERNAME + " ) " + ")";
 
 		executeUpdate(sql);
+		System.out.print("CREATED LOGIN_TABLES");
 		
+		/*
 		String document = DOCUMENT_ID + " INT(13) NOT NULL AUTO_INCREMENT, "
 				+ DOCUMENT_TITLE + " VARCHAR(50) NOT NULL, "
 				+ DOCUMENT_AUTHOR + " VARCHAR(50) NOT NULL, "
@@ -218,6 +224,8 @@ Schema_Book, Schema_Magazine, Schema_Journal
 		
 		executeUpdate(sql);
 		
+		System.out.print("CREATED DOCUMENT_TABLES");
+		
 		tableName = MAGAZINE_TABLENAME;
 		sql = "CREATE TABLE " + tableName + "("
 				+ document 
@@ -225,6 +233,8 @@ Schema_Book, Schema_Magazine, Schema_Journal
 				+ "PRIMARY KEY ( " + DOCUMENT_ID + " ) " + ")";
 		
 		executeUpdate(sql);
+		
+		System.out.print("CREATED DOCUMENT_TABLES");
 		
 		tableName = BOOK_TABLENAME;
 		sql = "CREATE TABLE " + tableName + "("
@@ -235,6 +245,8 @@ Schema_Book, Schema_Magazine, Schema_Journal
 		
 		executeUpdate(sql);
 		
+		System.out.print("CREATED MAGAZINE");
+		*/
 		
 		
 		// TODO: create magazine table

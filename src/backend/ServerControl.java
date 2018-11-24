@@ -44,11 +44,19 @@ public class ServerControl implements Runnable
 	{
 		try
 		{
-			databaseController = db;
+			System.out.println("Setting up server control");
 			outputMessage = new ObjectOutputStream(toConnect.getOutputStream());
+			System.out.println("Setting up server control1");
+			
+			// HANGS HERE
 			inputMessage = new ObjectInputStream(toConnect.getInputStream());
+			
+			System.out.println("Setting up server control2");
 			fromClient = new BufferedReader(
 					new InputStreamReader(toConnect.getInputStream()));
+			databaseController = db;
+			System.out.println("Finished Setting up server control3");
+
 		} catch (IOException e)
 		{
 			e.getStackTrace();
@@ -59,14 +67,21 @@ public class ServerControl implements Runnable
 	 * Runs this thread
 	 */
 	public void run()
-	{
+	{	System.out.println("Running SERVER-Q");
 		while (true)
 		{
+			System.out.println("Running SERVER-Q2");
 			try
 			{
 				if (fromClient.readLine().equals("Incoming Message"))
 				{
-
+					
+					if(fromClient.readLine().equals("LOGIN"))
+					{
+						System.out.println("LOGIN ATTEMPT");
+						handleLogin();
+					}
+					
 				}
 			} catch (IOException e)
 			{
@@ -81,4 +96,31 @@ public class ServerControl implements Runnable
 
 	}
 
+	
+	public void handleLogin()
+	{
+		try
+		{
+			System.out.println("Waiting for input from client");
+			String user = fromClient.readLine();
+			String[] arr = user.split(" ");
+			
+			System.out.println("Recieved Username" + arr[0] + " and Password " + arr[1]);
+			String result = databaseController.login(arr[0],arr[1]);
+			
+			System.out.println("Sending back " + result);
+
+			outputMessage.writeObject(result);
+			outputMessage.flush();
+			outputMessage.reset();
+			
+		} catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+	}
+	
 }

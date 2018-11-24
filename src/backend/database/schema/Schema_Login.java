@@ -6,6 +6,8 @@ public interface Schema_Login
 	public static final String LOGIN_USER_REGISTERED_BUYER = "Registered Buyer";
 	public static final String LOGIN_USER_OPERATOR = "Operator";
 	public static final String LOGIN_USER_SYSADMIN = "Sysadmin";
+	public static final String LOGIN_USER_FAIL = "Failure";
+
 	
 	public static final String LOGIN_TABLENAME = "login";
 	public static final String LOGIN_USERNAME = "username";
