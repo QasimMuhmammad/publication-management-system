@@ -20,6 +20,8 @@ import backend.database.schema.Schema_Journal;
 import backend.database.schema.Schema_Login;
 import backend.database.schema.Schema_Magazine;
 import backend.database.shared.Book;
+import backend.database.shared.Journal;
+import backend.database.shared.Magazine;
 
 public class DatabaseEntity implements Database_Configuration, Schema_Login,
 		Schema_Book, Schema_Magazine, Schema_Journal
@@ -62,7 +64,65 @@ public class DatabaseEntity implements Database_Configuration, Schema_Login,
 			}
 		} catch (SQLException e)
 		{
-			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return result;
+	}
+
+	public Vector<Journal> getAllJournals()
+	{
+		String sql;
+		Vector<Journal> result = new Vector<Journal>();
+
+		try
+		{
+			sql = "SELECT * FROM " + JOURNAL_TABLENAME + ";";
+			preparedStatement = connection.prepareStatement(sql);
+			ResultSet resultSet = preparedStatement.executeQuery();
+
+			while (resultSet.next())
+			{
+				result.add(new Journal(
+						resultSet.getInt(1),
+						resultSet.getString(2),
+						resultSet.getString(3),
+						resultSet.getDate(4),
+						resultSet.getDate(5),
+						resultSet.getString(6)));
+			}
+		} catch (SQLException e)
+		{
+			e.printStackTrace();
+		}
+
+		return result;
+	}
+	
+	public Vector<Magazine> getAllMagazines()
+	{
+		String sql;
+		Vector<Magazine> result = new Vector<Magazine>();
+
+		try
+		{
+			sql = "SELECT * FROM " + MAGAZINE_TABLENAME + ";";
+			preparedStatement = connection.prepareStatement(sql);
+			ResultSet resultSet = preparedStatement.executeQuery();
+
+			while (resultSet.next())
+			{
+				result.add(new Magazine(
+						resultSet.getInt(1),
+						resultSet.getString(2),
+						resultSet.getString(3),
+						resultSet.getDate(4),
+						resultSet.getDate(5),
+						resultSet.getString(6),
+						resultSet.getInt(7)));
+			}
+		} catch (SQLException e)
+		{
 			e.printStackTrace();
 		}
 

@@ -9,4 +9,13 @@ public class Journal extends Document
 	{
 		super(id, title, author, creation, lastModified, fileExtension);
 	}
+	
+	@Override
+	public String toString()
+	{
+		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append("--- Journal ---\n");
+		stringBuilder.append(super.toString());
+		return stringBuilder.toString();
+	}
 }
