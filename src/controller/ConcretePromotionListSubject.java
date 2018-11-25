@@ -6,31 +6,31 @@ public class ConcretePromotionListSubject implements PromotionListSubject
 {
 
 	private Vector<String> thePromotionList;
-	private Vector<RegisteredBuyerObserver> observers;
+	private Vector<RegisteredBuyerObserver> allRegisteredBuyers;
 	
 	public ConcretePromotionListSubject()
 	{
-		thePromotionList = new Vector<>();
-		observers = new Vector<RegisteredBuyerObserver>();
+		thePromotionList = new Vector<String>();
+		allRegisteredBuyers = new Vector<RegisteredBuyerObserver>();
 	}
 	
 	@Override
 	public void register(RegisteredBuyerObserver o)
 	{
-		observers.addElement(o);
+		allRegisteredBuyers.addElement(o);
 	}
 
 	@Override
 	public void unregister(RegisteredBuyerObserver o)
 	{
-		observers.remove(o);
+		allRegisteredBuyers.remove(o);
 	}
 
 	@Override
 	public void notifyAllObservers()	// notifies all registered buyers (updates their promotion list)
 	{
-		for(int i = 0; i < observers.size(); i++)
-			observers.get(i).update(thePromotionList);
+		for(int i = 0; i < allRegisteredBuyers.size(); i++)
+			allRegisteredBuyers.get(i).update(thePromotionList);
 	}
 	
 	public void addPromotion(String promotion)
@@ -43,6 +43,11 @@ public class ConcretePromotionListSubject implements PromotionListSubject
 	{
 		thePromotionList.remove(promotion);
 		notifyAllObservers();
+	}
+	
+	public Vector<String> getPromotionList()
+	{
+		return thePromotionList;
 	}
 
 	

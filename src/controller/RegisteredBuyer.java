@@ -15,10 +15,5 @@ class RegisteredBuyer
 		myController = new RegisteredBuyerController(userName, password,oldClient,myOldOrders);
 		
 	}
-	
-	public static void main(String args[])
-	{
-		new RegisteredBuyer("Trevor", "1234", null, null);
-	}
 
 }

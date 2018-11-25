@@ -11,14 +11,15 @@ public class RegisteredBuyerController extends OrdinaryBuyerController
 {
 	private RegisteredView myViews;
 	private ConcreteRegisteredBuyerObserver observer;
+	private ConcretePromotionListSubject promotionList;
 	
 	
 	public RegisteredBuyerController(String user,String pass,Client oldClient, ArrayList<Order> myOldOrders)
 	{
 		myClient = oldClient;
 		myOrders = myOldOrders;
-		observer = new ConcreteRegisteredBuyerObserver();
-		myViews = new RegisteredView(user,pass,observer.getPromotionList());
+		promotionList = new ConcretePromotionListSubject();
+		myViews = new RegisteredView(user,pass,promotionList.getPromotionList());
 		BuyerListeners(myViews);
 		RegisteredListeners();
 		NotificationSetup();

@@ -2,30 +2,27 @@ package controller;
 
 import java.util.Vector;
 
+
 public class ConcreteRegisteredBuyerObserver implements RegisteredBuyerObserver
 {
 	private Vector<String> thePromotionList;
 	
-	public ConcreteRegisteredBuyerObserver()
+	public ConcreteRegisteredBuyerObserver(ConcretePromotionListSubject p)
 	{
-		// TESTING CODE
-		// TODO: Remove
+		p.register(this);
 		thePromotionList = new Vector<>();
-//		thePromotionList.add("First item");
-//		thePromotionList.add("Second item");
-//		thePromotionList.add("Third item");
-//		thePromotionList.add("Fourth item");
-//		thePromotionList.add("Fifth item");
-//		thePromotionList.add("Sixth item");
+		this.update(p.getPromotionList());
 	}
 	
+	@Override
 	public void update(Vector<String> p)
 	{
 		thePromotionList = p;
+		notification();
 	}
 	
-	public Vector<String> getPromotionList()
+	public void notification()
 	{
-		return thePromotionList;
+		// TODO: Display notification on GUI
 	}
 }
