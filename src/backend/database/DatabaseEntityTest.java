@@ -2,11 +2,15 @@ package backend.database;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.Vector;
+
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import backend.database.shared.Book;
 
 
 class DatabaseEntityTest
@@ -68,7 +72,11 @@ class DatabaseEntityTest
 	@Test
 	void testGetAllBooks()
 	{
-		
+		Vector<Book> books = db.getAllBooks();
+		for (Book book : books)
+		{
+			System.out.println(book);
+		}
 	}
 
 }

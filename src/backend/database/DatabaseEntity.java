@@ -19,6 +19,7 @@ import backend.database.schema.Schema_Book;
 import backend.database.schema.Schema_Journal;
 import backend.database.schema.Schema_Login;
 import backend.database.schema.Schema_Magazine;
+import backend.database.shared.Book;
 
 public class DatabaseEntity implements Database_Configuration, Schema_Login,
 		Schema_Book, Schema_Magazine, Schema_Journal
@@ -33,28 +34,38 @@ public class DatabaseEntity implements Database_Configuration, Schema_Login,
 		connectionProps.put("user", DB_USERNAME);
 		connectionProps.put("password", DB_PASSWORD);
 	}
-	
-	public Vector<String> getAllBooks()
+
+	public Vector<Book> getAllBooks()
 	{
 		String sql;
-		Vector<String> result = new Vector<String>();
-	
+		Vector<Book> result = new Vector<Book>();
+
 		try
 		{
 			sql = "SELECT * FROM " + BOOK_TABLENAME + ";";
 			preparedStatement = connection.prepareStatement(sql);
 			ResultSet resultSet = preparedStatement.executeQuery();
-			
-//			while (resultSet.next())
-//			{
-//				
-//			}
+
+			while (resultSet.next())
+			{
+				result.add(new Book(
+						resultSet.getInt(1),
+						resultSet.getString(2),
+						resultSet.getString(3),
+						resultSet.getDate(4),
+						resultSet.getDate(5),
+						resultSet.getString(6),
+						resultSet.getString(7).equals("true") ? true : false,
+						resultSet.getString(8).equals("true") ? true : false,
+						resultSet.getString(9),
+						resultSet.getInt(10)));
+			}
 		} catch (SQLException e)
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		return result;
 	}
 
@@ -279,77 +290,6 @@ public class DatabaseEntity implements Database_Configuration, Schema_Login,
 		databaseFileLoader.setDatabaseInsertStrategy(
 				new DatabaseInsertJournal(connection));
 		databaseFileLoader.performInsertStrategy();
-
-		// File file;
-		// Path path;
-		//
-		// file = new File(LOGIN_PATH);
-		// path = file.toPath();
-		//
-		// try
-		// {
-		// CSVFileReader reader = new CSVFileReader(path);
-		//
-		// while (reader.hasNext())
-		// {
-		// String[] fields = reader.next();
-		// insertUser(fields);
-		// }
-		// } catch (FileNotFoundException e)
-		// {
-		// e.printStackTrace();
-		// }
-		//
-		// file = new File(BOOK_PATH);
-		// path = file.toPath();
-		//
-		// try
-		// {
-		// CSVFileReader reader = new CSVFileReader(path);
-		//
-		// while (reader.hasNext())
-		// {
-		// String[] fields = reader.next();
-		// insertBook(fields);
-		// }
-		// } catch (FileNotFoundException e)
-		// {
-		// e.printStackTrace();
-		// }
-		//
-		// file = new File(MAGAZINE_PATH);
-		// path = file.toPath();
-		//
-		// try
-		// {
-		// CSVFileReader reader = new CSVFileReader(path);
-		//
-		// while (reader.hasNext())
-		// {
-		// String[] fields = reader.next();
-		// insertMagazine(fields);
-		// }
-		// } catch (FileNotFoundException e)
-		// {
-		// e.printStackTrace();
-		// }
-		//
-		// file = new File(JOURNAL_PATH);
-		// path = file.toPath();
-		//
-		// try
-		// {
-		// CSVFileReader reader = new CSVFileReader(path);
-		//
-		// while (reader.hasNext())
-		// {
-		// String[] fields = reader.next();
-		// insertJournal(fields);
-		// }
-		// } catch (FileNotFoundException e)
-		// {
-		// e.printStackTrace();
-		// }
 	}
 
 	public void insertUser(final String[] user)
