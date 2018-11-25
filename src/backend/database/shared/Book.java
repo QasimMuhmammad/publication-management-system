@@ -1,5 +1,6 @@
 package backend.database.shared;
 
+import java.io.Serializable;
 import java.util.Date;
 
 public class Book extends Document
@@ -11,9 +12,9 @@ public class Book extends Document
 	
 	public Book(int id, String title, String author, Date creation,
 			Date lastModified, String fileExtension, boolean isHardCover,
-			boolean isFiction, String genre, int isbn)
+			boolean isFiction, String genre, int isbn, Double price)
 	{
-		super(id, title, author, creation, lastModified, fileExtension);
+		super(id, title, author, creation, lastModified, fileExtension, price);
 		
 		this.isHardCover = isHardCover;
 		this.isFiction = isFiction;
@@ -53,5 +54,11 @@ public class Book extends Document
 		stringBuilder.append("Genre: " + genre + "\n");
 		stringBuilder.append("ISBN: " + isbn + "\n");
 		return stringBuilder.toString();
+	}
+
+	@Override
+	public String getType()
+	{
+		return "Book";
 	}
 }

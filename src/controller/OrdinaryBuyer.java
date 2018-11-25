@@ -7,7 +7,7 @@ class OrdinaryBuyer
 	public OrdinaryBuyer()
 	{
 		myController = new OrdinaryBuyerController();
-		myController.setClient(new Client("localhost", 8087));
+		myController.setClient(new Client("localhost", 9000));
 	}
 	
 	

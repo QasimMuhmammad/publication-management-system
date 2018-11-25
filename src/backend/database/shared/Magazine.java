@@ -7,9 +7,9 @@ public class Magazine extends Document
 	private int issueId;
 	
 	public Magazine(int id, String title, String author, Date creation,
-			Date lastModified, String fileExtension, int issueId)
+			Date lastModified, String fileExtension, int issueId, Double price)
 	{
-		super(id, title, author, creation, lastModified, fileExtension);
+		super(id, title, author, creation, lastModified, fileExtension,price);
 		this.issueId = issueId;
 	}
 	
@@ -28,4 +28,11 @@ public class Magazine extends Document
 		stringBuilder.append("Issue ID: " + issueId + "\n");
 		return stringBuilder.toString();
 	}
+	
+	@Override
+	public String getType()
+	{
+		return "Magazine";
+	}
+	
 }

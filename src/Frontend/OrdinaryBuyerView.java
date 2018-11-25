@@ -2,14 +2,18 @@ package Frontend;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import java.awt.Font;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 
 import controller.Client;
 
 import javax.swing.JTextField;
+import javax.swing.JViewport;
 import javax.swing.JLabel;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -21,6 +25,7 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 
 import java.awt.Color;
+import java.awt.Dimension;
 
 public class OrdinaryBuyerView extends Views
 {
@@ -116,6 +121,13 @@ public class OrdinaryBuyerView extends Views
 		
 		myOrderlist = new JList<String>();
 		myOrderlist.setBounds(16, 33, 194, 68);
+		myOrderlist.setFont(new Font("Courier New", Font.PLAIN, 8));
+		myOrderlist.setVisibleRowCount(30);
+		myOrderlist.setPrototypeCellValue("123456789123456789123456789123456789123456789");
+		
+		JScrollPane myScrollBar = new JScrollPane(myOrderlist);
+		myScrollBar.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		myScrollBar.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 		contentPane.add(myOrderlist);
 		
 		textField_2 = new JTextField();
@@ -130,7 +142,17 @@ public class OrdinaryBuyerView extends Views
 		
 		serachList  = new JList<String>();
 		serachList.setBounds(243, 44, 201, 57);
+		serachList.setFont(new Font("Courier New", Font.PLAIN, 8));
+		serachList.setPrototypeCellValue("123456789123456789123456789123456789123456789");
+		
+		JScrollPane searchScroll = new JScrollPane(serachList);
+		searchScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		searchScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		searchScroll.setPreferredSize(new Dimension(20, 40));
+		serachList.setVisibleRowCount(8);
+		
 		contentPane.add(serachList);
+		contentPane.add(searchScroll);
 		
 		// Add to Order
 		addToOrderButton = new JButton("Add to Order");

@@ -1,11 +1,12 @@
 package backend.database.shared;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import backend.PublicationStrategy;
 import backend.PublishException;
 
-public class Document
+public abstract class Document implements Serializable
 {
 	private int documentId;
 	private String documentTitle;
@@ -13,11 +14,13 @@ public class Document
 	private Date creationDate;
 	private Date lastModifiedDate;
 	private String fileExtension;
+	private Double price;
 
 	private PublicationStrategy publicationStrategy;
-
+	
+	
 	public Document(int id, String title, String author, Date creation,
-			Date lastModified, String fileExtension)
+			Date lastModified, String fileExtension, Double price)
 	{
 		this.documentId = id;
 		this.documentTitle = title;
@@ -25,7 +28,10 @@ public class Document
 		this.creationDate = creation;
 		this.lastModifiedDate = lastModified;
 		this.fileExtension = fileExtension;
+		this.price = price;
 	}
+	
+	public abstract String getType();
 
 	public void publish() throws PublishException
 	{
@@ -65,6 +71,11 @@ public class Document
 	public String getFileExtension()
 	{
 		return fileExtension;
+	}
+	
+	public Double getPrice()
+	{
+		return price;
 	}
 
 	@Override

@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Vector;
 
 import javax.swing.JTextField;
 
@@ -12,6 +13,8 @@ import com.sun.org.apache.bcel.internal.generic.NEW;
 
 import Frontend.OrdinaryBuyerView;
 import Frontend.Views;
+import backend.database.shared.Book;
+import backend.database.shared.Document;
 
 public class OrdinaryBuyerController
 {
@@ -29,6 +32,7 @@ public class OrdinaryBuyerController
 	{
 		myClient = myC;
 		setupViews();
+		initializeViews();
 	}
 	
 	void setupViews()
@@ -39,6 +43,48 @@ public class OrdinaryBuyerController
 		myViews.setVisible(true);
 	}
 	
+	void initializeViews()
+	{
+		myClient.myWriter.println("INITIALIZE DOCUMENTS");
+		try
+		{
+			Vector<Document> resultOfSearch = (Vector<Document>)myClient.myInputStream.readObject();
+			for (int i = 0; i < resultOfSearch.size(); i++)
+			{	
+				String price = " $ " + "Price is "+ resultOfSearch.get(i).getPrice().toString();
+				String type = resultOfSearch.get(i).getType();
+				String toAdd= "";
+				switch (type)
+				{
+				case "Journal":
+					toAdd += "Journal ";
+					break;
+
+				case "Book":
+					toAdd += "Book ";
+					break;
+					
+				case "Magazine":
+					toAdd += "Magazine ";
+					break;
+				}
+				
+				toAdd += resultOfSearch.get(i).getDocumentTitle() + " " + resultOfSearch.get(i).getAuthor() + price;
+				myViews.getSearchModel().addElement(toAdd);
+			}
+			myViews.getSearchList().setModel(myViews.getSearchModel());
+			
+		} catch (ClassNotFoundException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
 	
 	void loginOrdinaryBuyer()
 	{
@@ -148,7 +194,7 @@ public class OrdinaryBuyerController
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				//Order myOrder = myViews.getOrder();
+				
 				
 			}
 		});
@@ -164,6 +210,8 @@ public class OrdinaryBuyerController
 				{
 					String toAdd = myViews.getSearchModel().getElementAt(index);
 					myViews.getOrderModel().addElement(toAdd);
+					myViews.getOrderJList().setModel(myViews.getOrderModel());
+					
 				}
 				
 				

@@ -5,9 +5,9 @@ import java.util.Date;
 public class Journal extends Document
 {
 	public Journal(int id, String title, String author, Date creation, 
-			Date lastModified, String fileExtension)
+			Date lastModified, String fileExtension, Double price)
 	{
-		super(id, title, author, creation, lastModified, fileExtension);
+		super(id, title, author, creation, lastModified, fileExtension, price);
 	}
 	
 	@Override
@@ -17,5 +17,11 @@ public class Journal extends Document
 		stringBuilder.append("--- Journal ---\n");
 		stringBuilder.append(super.toString());
 		return stringBuilder.toString();
+	}
+	
+	@Override
+	public String getType()
+	{
+		return "Journal";
 	}
 }

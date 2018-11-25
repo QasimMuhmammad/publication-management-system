@@ -5,8 +5,11 @@ import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.Vector;
 
 import backend.database.DatabaseEntity;
+import backend.database.shared.Book;
+import backend.database.shared.Document;
 
 /**
  * Used by server to enable multi-threaded clients
@@ -93,9 +96,9 @@ public class ServerControl implements Runnable
 					}
 					
 				}
-				else if(intialCommand.equals("Setup Message"))
+				else if(intialCommand.equals("INITIALIZE DOCUMENTS"))
 				{
-					
+					handlieInitialize();
 					
 				}
 				
@@ -165,6 +168,23 @@ public class ServerControl implements Runnable
 		
 	}
 
-	
+	public void handlieInitialize()
+	{
+		System.out.println("Initializing all the documents");
+		Vector<Document> myBooks = databaseController.getAllDocuments();
+		
+		try
+		{
+			outputMessage.writeObject(myBooks);
+			outputMessage.flush();
+			outputMessage.reset();
+		} catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+	}
 	
 }

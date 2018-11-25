@@ -32,9 +32,10 @@ Schema_Magazine
 				+ DOCUMENT_CREATION_DATE + ", "
 				+ DOCUMENT_LAST_MODIFIED_DATE + ", "
 				+ DOCUMENT_FILE_EXTENSION + ", "
-				+ MAGAZINE_ISSUE_ID
+				+ MAGAZINE_ISSUE_ID + ", "
+				+ DOCUMENT_PRICE
 				+ ")"
-				+ " VALUES" + "(?,?,?,?,?,?)";
+				+ " VALUES" + "(?,?,?,?,?,?,?)";
 		
 		try
 		{
@@ -49,6 +50,7 @@ Schema_Magazine
 					new java.sql.Date(formatter.parse(magazine[3]).getTime()));
 			preparedStatement.setString(5, magazine[4]);
 			preparedStatement.setInt(6, Integer.parseInt(magazine[5]));
+			preparedStatement.setDouble(7, Double.parseDouble(magazine[6]));
 			preparedStatement.executeUpdate();
 		} catch (SQLException | ParseException e)
 		{

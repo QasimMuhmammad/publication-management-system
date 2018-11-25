@@ -36,6 +36,7 @@ public class Server
 			pool = Executors.newCachedThreadPool();
 			databaseController= new DatabaseEntity();
 			databaseController.connect();
+			databaseController.destroyDatabase();
 			databaseController.prepareDatabase();
 			System.out.println("Server set up");
 		} catch (IOException e)
@@ -89,5 +90,13 @@ public class Server
 				}
 			}
 		}
+	}
+	
+	public static void main(String[] args)
+	{
+		Server server = new Server(9000);
+		server.runServer();
+		
+		
 	}
 }

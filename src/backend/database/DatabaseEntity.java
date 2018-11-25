@@ -20,6 +20,7 @@ import backend.database.schema.Schema_Journal;
 import backend.database.schema.Schema_Login;
 import backend.database.schema.Schema_Magazine;
 import backend.database.shared.Book;
+import backend.database.shared.Document;
 import backend.database.shared.Journal;
 import backend.database.shared.Magazine;
 
@@ -60,7 +61,7 @@ public class DatabaseEntity implements Database_Configuration, Schema_Login,
 						resultSet.getString(7).equals("true") ? true : false,
 						resultSet.getString(8).equals("true") ? true : false,
 						resultSet.getString(9),
-						resultSet.getInt(10)));
+						resultSet.getInt(10),resultSet.getDouble(11)));
 			}
 		} catch (SQLException e)
 		{
@@ -89,7 +90,7 @@ public class DatabaseEntity implements Database_Configuration, Schema_Login,
 						resultSet.getString(3),
 						resultSet.getDate(4),
 						resultSet.getDate(5),
-						resultSet.getString(6)));
+						resultSet.getString(6),resultSet.getDouble(7)));
 			}
 		} catch (SQLException e)
 		{
@@ -119,7 +120,7 @@ public class DatabaseEntity implements Database_Configuration, Schema_Login,
 						resultSet.getDate(4),
 						resultSet.getDate(5),
 						resultSet.getString(6),
-						resultSet.getInt(7)));
+						resultSet.getInt(7),resultSet.getDouble(8)));
 			}
 		} catch (SQLException e)
 		{
@@ -129,6 +130,16 @@ public class DatabaseEntity implements Database_Configuration, Schema_Login,
 		return result;
 	}
 
+	public Vector<Document> getAllDocuments()
+	{
+		Vector<Document> result = new Vector<Document>();
+		result.addAll(getAllBooks());
+		result.addAll(getAllMagazines());
+		result.addAll(getAllJournals());
+		
+		return result;	
+	}
+	
 	public boolean registerUser(String username, String password)
 	{
 		String sql;
@@ -184,7 +195,17 @@ public class DatabaseEntity implements Database_Configuration, Schema_Login,
 
 			while (rSet.next())
 			{
-				return LOGIN_USER_REGISTERED_BUYER;
+				int type = rSet.getInt(2);
+				System.out.println("Found " + type);
+				switch (type)
+				{
+				case 1:
+					return LOGIN_USER_REGISTERED_BUYER;
+
+				case 2:
+					return LOGIN_USER_OPERATOR;
+				}
+				
 			}
 		} catch (SQLException e)
 		{
@@ -303,13 +324,13 @@ public class DatabaseEntity implements Database_Configuration, Schema_Login,
 				+ " VARCHAR(10) NOT NULL, ";
 
 		tableName = JOURNAL_TABLENAME;
-		sql = "CREATE TABLE " + tableName + "(" + document + "PRIMARY KEY ( "
+		sql = "CREATE TABLE " + tableName + "(" + document + DOCUMENT_PRICE + " DOUBLE NOT NULL, "+ "PRIMARY KEY ( "
 				+ DOCUMENT_ID + " ) " + ")";
 		executeUpdate(sql);
 
 		tableName = MAGAZINE_TABLENAME;
 		sql = "CREATE TABLE " + tableName + "(" + document + MAGAZINE_ISSUE_ID
-				+ " INT(5) NOT NULL, " + "PRIMARY KEY ( " + DOCUMENT_ID + " ) "
+				+ " INT(5) NOT NULL, " + DOCUMENT_PRICE + " DOUBLE NOT NULL, " + "PRIMARY KEY ( " + DOCUMENT_ID + " ) "
 				+ ")";
 		executeUpdate(sql);
 
@@ -317,7 +338,7 @@ public class DatabaseEntity implements Database_Configuration, Schema_Login,
 		sql = "CREATE TABLE " + tableName + "(" + document + BOOK_IS_HARDCOVER
 				+ " CHAR(5) NOT NULL, " + BOOK_IS_FICTION
 				+ " CHAR(5) NOT NULL, " + BOOK_GENRE + " VARCHAR(30) NOT NULL, "
-				+ BOOK_ISBN + " INT(13) NOT NULL, " + "PRIMARY KEY ( "
+				+ BOOK_ISBN + " INT(13) NOT NULL, " +DOCUMENT_PRICE + " DOUBLE NOT NULL, " + "PRIMARY KEY ( "
 				+ DOCUMENT_ID + " ) " + ")";
 		executeUpdate(sql);
 	}
