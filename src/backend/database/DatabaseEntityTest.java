@@ -38,16 +38,31 @@ class DatabaseEntityTest
 	}
 
 	@Test
-	void RegisterUser()
+	void testRegisterUser()
 	{
 		String username, password;
 		username = "Paul";
 		password = "secure";
 		
 		System.out.println("In RegisterUser");
-		db.registerUser(username, password);
-		System.out.println("Valid Login!");
 		
+		assertTrue(db.registerUser(username, password));
+		
+		assertEquals(LOGIN_USERS.LOGIN_USER_REGISTERED_BUYER,
+				db.login(username, password));
+		
+		assertFalse(db.registerUser(username, password));
+	}
+	
+	@Test
+	void testLoginUser()
+	{
+		String username, password;
+		username = "jimmy";
+		password = "1";
+		
+		assertEquals(db.login(username, password),
+				LOGIN_USERS.LOGIN_USER_REGISTERED_BUYER);
 	}
 
 }
