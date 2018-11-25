@@ -51,6 +51,15 @@ Schema_Book, Schema_Magazine, Schema_Journal
 			preparedStatement.setString(1, username);
 			ResultSet rSet = preparedStatement.executeQuery();
 			
+			int entries = 0;
+			
+			if (rSet != null)
+			{
+				rSet.last();
+				entries = rSet.getRow();
+			}
+			
+			if (entries == 0)
 			if(rSet.next())
 			{
 				System.out.println("Username: " 
@@ -84,8 +93,6 @@ Schema_Book, Schema_Magazine, Schema_Journal
 	public String login(String username, String password)
 	{
 		String sql;
-		System.out.println("Attempting Login db");
-		
 		try
 		{
 			sql = "SELECT " + LOGIN_USERNAME + "," 
@@ -100,8 +107,6 @@ Schema_Book, Schema_Magazine, Schema_Journal
 			
 			while (rSet.next())
 			{
-				System.out.println("Authenticated User: " + rSet.getString(1));
-				System.out.println("Type: " + rSet.getInt(2));
 				return LOGIN_USER_REGISTERED_BUYER;
 			}
 		} catch (SQLException e)
@@ -258,19 +263,19 @@ Schema_Book, Schema_Magazine, Schema_Journal
 		file = new File(BOOK_PATH);
 		databaseFileLoader.setFile(file);
 		databaseFileLoader.setDatabaseInsertStrategy(
-				new DatabaseInsertUser(connection));
+				new DatabaseInsertBook(connection));
 		databaseFileLoader.performInsertStrategy();
 		
 		file = new File(MAGAZINE_PATH);
 		databaseFileLoader.setFile(file);
 		databaseFileLoader.setDatabaseInsertStrategy(
-				new DatabaseInsertUser(connection));
+				new DatabaseInsertMagazine(connection));
 		databaseFileLoader.performInsertStrategy();
 		
 		file = new File(JOURNAL_PATH);
 		databaseFileLoader.setFile(file);
 		databaseFileLoader.setDatabaseInsertStrategy(
-				new DatabaseInsertUser(connection));
+				new DatabaseInsertJournal(connection));
 		databaseFileLoader.performInsertStrategy();
 		
 //		File file;
