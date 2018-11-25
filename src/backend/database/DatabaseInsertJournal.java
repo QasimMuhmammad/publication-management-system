@@ -31,9 +31,10 @@ Schema_Journal
 				+ DOCUMENT_AUTHOR + ", "
 				+ DOCUMENT_CREATION_DATE + ", "
 				+ DOCUMENT_LAST_MODIFIED_DATE + ", "
-				+ DOCUMENT_FILE_EXTENSION
+				+ DOCUMENT_FILE_EXTENSION+ ", "
+				+ DOCUMENT_PRICE
 				+ ")"
-				+ " VALUES" + "(?,?,?,?,?)";
+				+ " VALUES" + "(?,?,?,?,?,?)";
 		
 		try
 		{
@@ -47,6 +48,7 @@ Schema_Journal
 			preparedStatement.setDate(4, 
 					new java.sql.Date(formatter.parse(journal[3]).getTime()));
 			preparedStatement.setString(5, journal[4]);
+			preparedStatement.setDouble(6, Double.parseDouble(journal[5]));
 			preparedStatement.executeUpdate();
 		} catch (SQLException | ParseException e)
 		{

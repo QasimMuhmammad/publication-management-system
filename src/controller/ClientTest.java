@@ -11,21 +11,21 @@ import org.junit.jupiter.api.TestInstance.Lifecycle;
 
 import backend.Server;
 
-@TestInstance(Lifecycle.PER_CLASS)
 class ClientTest
 {
 	public static final int SERVER_PORT = 9001;
 	public static final String SERVER_HOSTNAME = "localhost";
-	private Server server;
-	private Client client;
+	static private Server server;
+	static private Client client;
 
 	
 	@BeforeAll
-	void setUpClass() throws Exception
+	static void setUpClass() throws Exception
 	{
 		System.out.println("BEFORE CLASS");
 		server = new Server(SERVER_PORT);
 		server.runServer();
+		System.out.println("HELLO");
 	}
 
 	
@@ -43,7 +43,7 @@ class ClientTest
 	}
 
 	@AfterAll
-	void tearDownClass() throws Exception
+	static void tearDownClass() throws Exception
 	{
 		System.out.println("Shutting down tests...");
 		server.shutdown();

@@ -2,6 +2,7 @@ package backend;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketTimeoutException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -31,9 +32,11 @@ public class Server
 		try
 		{
 			serverSocket = new ServerSocket(port);
+			serverSocket.setSoTimeout(1000);
 			pool = Executors.newCachedThreadPool();
 			databaseController= new DatabaseEntity();
 			databaseController.connect();
+			databaseController.destroyDatabase();
 			databaseController.prepareDatabase();
 			System.out.println("Server set up");
 		} catch (IOException e)
@@ -49,46 +52,51 @@ public class Server
 	{
 		System.out.println("Server is running");
 		
-		
-				try
-				{System.out.println("Waiting to Connect Client");
-					while (true)
-					{
-						Socket mySocket = serverSocket.accept();
-						System.out.println("Connected Client");
-
-						ServerControl handleMessage = new ServerControl(
-								mySocket, databaseController);
-						System.out.println("About to execute Client");
-						pool.execute(handleMessage);
-					}
-				} catch (IOException e)
-				{
-					e.printStackTrace();
-				}
-			
-		
-	
-		
+		socketAcceptor = new SocketAcceptor();
+		socketAcceptor.start();
 	}
 	
 	public void shutdown()
 	{
 		pool.shutdown();
 		databaseController.disconnect();
+		socketAcceptor.interrupt();
 	}
+	
+	class SocketAcceptor extends Thread
+	{
 
-	/**
-	 * Starts the server
-	 * 
-	 * @param args
-	 *            not used
-	 */
+		@Override
+		public void run()
+		{
+			while (!isInterrupted())
+			{
+				Socket mySocket;
+				try
+				{
+					mySocket = serverSocket.accept();
+					
+					System.out.println("Connected Client");
+					
+					ServerControl handleMessage = new ServerControl(
+							mySocket, databaseController);
+					System.out.println("About to execute Client");
+					pool.execute(handleMessage);
+				} catch (SocketTimeoutException e)
+				{
+				} catch (IOException e)
+				{
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
 	public static void main(String[] args)
 	{
-		Server myServer = new Server(8086);
-		myServer.runServer();
-
+		Server server = new Server(9000);
+		server.runServer();
+		
+		
 	}
-
 }

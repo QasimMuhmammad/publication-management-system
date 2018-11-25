@@ -33,9 +33,10 @@ public class DatabaseInsertBook implements DatabaseInsertStrategy, Schema_Book
 				+ BOOK_IS_HARDCOVER + ", "
 				+ BOOK_IS_FICTION + ", "
 				+ BOOK_GENRE + ", "
-				+ BOOK_ISBN
+				+ BOOK_ISBN+ ", "
+				+ DOCUMENT_PRICE
 				+ ")"
-				+ " VALUES" + "(?,?,?,?,?,?,?,?,?)";
+				+ " VALUES" + "(?,?,?,?,?,?,?,?,?,?)";
 		
 		try
 		{
@@ -53,6 +54,7 @@ public class DatabaseInsertBook implements DatabaseInsertStrategy, Schema_Book
 			preparedStatement.setString(7, book[6]);
 			preparedStatement.setString(8, book[7]);
 			preparedStatement.setInt(9, Integer.parseInt(book[8]));
+			preparedStatement.setDouble(10, Double.parseDouble(book[9]));
 			preparedStatement.executeUpdate();
 			
 		} catch (SQLException | ParseException e)

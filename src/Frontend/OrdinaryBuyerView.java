@@ -2,15 +2,20 @@ package Frontend;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import java.awt.Font;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 
 import controller.Client;
 
 import javax.swing.JTextField;
+import javax.swing.JViewport;
 import javax.swing.JLabel;
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
@@ -20,6 +25,7 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 
 import java.awt.Color;
+import java.awt.Dimension;
 
 public class OrdinaryBuyerView extends Views
 {
@@ -32,8 +38,10 @@ public class OrdinaryBuyerView extends Views
 	private JButton makeOrderButton;
 	private JButton searchButton;
 	private JButton addToOrderButton;
-	private JList list;
-	private JList list_1; 
+	private JList<String> myOrderlist;
+	private JList<String> serachList; 
+	private DefaultListModel<String> myOrderModel;
+	private DefaultListModel<String> mySearchModel;
 	
 	
 	/**
@@ -45,6 +53,8 @@ public class OrdinaryBuyerView extends Views
 		setupBeginning();
 		addLogin();
 		addNormal();
+		myOrderModel = new DefaultListModel<String>();
+		mySearchModel = new DefaultListModel<String>();
 		
 	}
 	
@@ -109,9 +119,16 @@ public class OrdinaryBuyerView extends Views
 		makeOrderButton.setBounds(118, 115, 100, 29);
 		contentPane.add(makeOrderButton);
 		
-		list = new JList();
-		list.setBounds(16, 33, 194, 68);
-		contentPane.add(list);
+		myOrderlist = new JList<String>();
+		myOrderlist.setBounds(16, 33, 194, 68);
+		myOrderlist.setFont(new Font("Courier New", Font.PLAIN, 8));
+		myOrderlist.setVisibleRowCount(30);
+		myOrderlist.setPrototypeCellValue("123456789123456789123456789123456789123456789");
+		
+		JScrollPane myScrollBar = new JScrollPane(myOrderlist);
+		myScrollBar.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		myScrollBar.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		contentPane.add(myOrderlist);
 		
 		textField_2 = new JTextField();
 		textField_2.setBounds(314, 6, 130, 26);
@@ -123,9 +140,19 @@ public class OrdinaryBuyerView extends Views
 		searchButton.setBounds(233, 6, 77, 29);
 		contentPane.add(searchButton);
 		
-		list_1  = new JList();
-		list_1.setBounds(243, 44, 201, 57);
-		contentPane.add(list_1);
+		serachList  = new JList<String>();
+		serachList.setBounds(243, 44, 201, 57);
+		serachList.setFont(new Font("Courier New", Font.PLAIN, 8));
+		serachList.setPrototypeCellValue("123456789123456789123456789123456789123456789");
+		
+		JScrollPane searchScroll = new JScrollPane(serachList);
+		searchScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		searchScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		searchScroll.setPreferredSize(new Dimension(20, 40));
+		serachList.setVisibleRowCount(8);
+		
+		contentPane.add(serachList);
+		contentPane.add(searchScroll);
 		
 		// Add to Order
 		addToOrderButton = new JButton("Add to Order");
@@ -179,15 +206,26 @@ public class OrdinaryBuyerView extends Views
 		return textField_2;
 	}
 	
-	public JList getJList()
+	public JList<String> getOrderJList()
 	{
-		return list;
+		return myOrderlist;
 	}
 	
-	public JList getJList_1()
+	public JList<String> getSearchList()
 	{
-		return list_1;
+		return serachList;
 	}
+	
+	public DefaultListModel<String> getOrderModel()
+	{
+		return myOrderModel;
+	}
+	
+	public DefaultListModel<String> getSearchModel()
+	{
+		return mySearchModel;
+	}
+	
 	
 	public void showLoginError()
 	{
@@ -207,8 +245,15 @@ public class OrdinaryBuyerView extends Views
 		
 	}
 	
+
 	public void removeSelected()
 	{
+		int index = myOrderlist.getSelectedIndex();
+		if(index >= 0)
+		{
+			myOrderModel.removeElementAt(index);
+			myOrderlist.setModel(myOrderModel);
+		}
 		
 	}
 
