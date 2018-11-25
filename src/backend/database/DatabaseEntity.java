@@ -185,8 +185,10 @@ public class DatabaseEntity implements Database_Configuration, Schema_Login,
 		String sql;
 		try
 		{
-			sql = "SELECT " + LOGIN_USERNAME + "," + LOGIN_USERTYPE + " FROM "
-					+ LOGIN_TABLENAME + " WHERE " + LOGIN_USERNAME + "= ? AND "
+			sql = "SELECT " + LOGIN_USERNAME + "," 
+					+ LOGIN_USERTYPE + " FROM "
+					+ LOGIN_TABLENAME + " WHERE " 
+					+ LOGIN_USERNAME + "= ? AND "
 					+ LOGIN_PASSWORD + "= ?;";
 			preparedStatement = connection.prepareStatement(sql);
 			preparedStatement.setString(1, username.toLowerCase());
@@ -251,6 +253,7 @@ public class DatabaseEntity implements Database_Configuration, Schema_Login,
 
 	public void prepareDatabase()
 	{
+		
 		try
 		{
 			// See if the publication database exists
@@ -317,11 +320,11 @@ public class DatabaseEntity implements Database_Configuration, Schema_Login,
 		executeUpdate(sql);
 
 		String document = DOCUMENT_ID + " INT(13) NOT NULL AUTO_INCREMENT, "
-				+ DOCUMENT_TITLE + " VARCHAR(50) NOT NULL, " + DOCUMENT_AUTHOR
-				+ " VARCHAR(50) NOT NULL, " + DOCUMENT_CREATION_DATE
-				+ " DATE NOT NULL, " + DOCUMENT_LAST_MODIFIED_DATE
-				+ " DATE NOT NULL, " + DOCUMENT_FILE_EXTENSION
-				+ " VARCHAR(10) NOT NULL, ";
+				+ DOCUMENT_TITLE + " VARCHAR(50) NOT NULL, " 
+				+ DOCUMENT_AUTHOR + " VARCHAR(50) NOT NULL, " 
+				+ DOCUMENT_CREATION_DATE + " DATE NOT NULL, " 
+				+ DOCUMENT_LAST_MODIFIED_DATE + " DATE NOT NULL, " 
+				+ DOCUMENT_FILE_EXTENSION + " VARCHAR(10) NOT NULL, ";
 
 		tableName = JOURNAL_TABLENAME;
 		sql = "CREATE TABLE " + tableName + "(" + document + DOCUMENT_PRICE + " DOUBLE NOT NULL, "+ "PRIMARY KEY ( "
