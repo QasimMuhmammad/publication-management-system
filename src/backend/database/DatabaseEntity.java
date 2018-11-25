@@ -37,12 +37,16 @@ Schema_Book, Schema_Magazine, Schema_Journal
 	public boolean registerUser(String username, String password)
 	{
 		String sql;
+		boolean returnVal = false;
+		// TODO: Check if user already exists.
+
 		
 		try
 		{
 			sql = "SELECT * FROM " + LOGIN_TABLENAME + " WHERE " 
 					+ LOGIN_USERNAME 
 					+ "= ?;";
+
 			preparedStatement = connection.prepareStatement(sql);
 			preparedStatement.setString(1, username);
 			ResultSet rSet = preparedStatement.executeQuery();
@@ -56,23 +60,34 @@ Schema_Book, Schema_Magazine, Schema_Journal
 			}
 			
 			if (entries == 0)
+			if(rSet.next())
 			{
-				sql = "INSERT INTO " + LOGIN_TABLENAME + " VALUES" + "(?,?,?)";
-				preparedStatement = connection.prepareStatement(sql);
-				preparedStatement.setString(1, username.toLowerCase());
-				preparedStatement.setString(2, password);
-				preparedStatement.setInt(3, LOGIN_USERS.REGISTERED_BUYER.getId());
-				preparedStatement.executeUpdate();
-				
-				return true;
-			}			
+				System.out.println("Username: " 
+						+ rSet.getString(1) 
+						+ " already exists ");
+				returnVal= false;
+			}
+
 			
+			else
+			{
+			sql = "INSERT INTO " + LOGIN_TABLENAME + " VALUES" + "(?,?,?)";
+			preparedStatement = connection.prepareStatement(sql);
+			preparedStatement.setString(1, username.toLowerCase());
+			preparedStatement.setString(2, password);
+			preparedStatement.setInt(3, LOGIN_USERS.REGISTERED_BUYER.getId());
+			preparedStatement.executeUpdate();
+			returnVal = true;
+			}
+		
 		} catch (SQLException e)
 		{
 			e.printStackTrace();
 		}
 		
-		return false;
+
+		return returnVal;
+
 	}
 	
 	public String login(String username, String password)

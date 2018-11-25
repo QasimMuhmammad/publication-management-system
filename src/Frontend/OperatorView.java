@@ -20,7 +20,10 @@ public class OperatorView extends Views
 	/**
 	 * Launch the application.
 	 */
-	
+	JButton removeButton;
+	JButton updateButton;
+	JButton LogoutButton;
+	JButton addButton;
 
 	/**
 	 * Create the frame.
@@ -35,37 +38,54 @@ public class OperatorView extends Views
 		setContentPane(contentPane);
 		getContentPane().setLayout(null);
 		
-		JButton btnNewButton = new JButton("Add");
-		btnNewButton.addActionListener(new ActionListener() {
+		addButton = new JButton("Add");
+		addButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		btnNewButton.setBounds(24, 205, 131, 29);
-		getContentPane().add(btnNewButton);
+		addButton.setBounds(24, 205, 131, 29);
+		getContentPane().add(addButton);
 		
-		JButton btnNewButton_1 = new JButton("Remove");
-		btnNewButton_1.setBounds(313, 205, 131, 29);
-		getContentPane().add(btnNewButton_1);
+		removeButton = new JButton("Remove");
+		removeButton.setBounds(313, 205, 131, 29);
+		getContentPane().add(removeButton);
 		
-		JButton btnNewButton_2 = new JButton("Update");
-		btnNewButton_2.setBounds(167, 205, 131, 29);
-		getContentPane().add(btnNewButton_2);
+		updateButton = new JButton("Update");
+		updateButton.setBounds(167, 205, 131, 29);
+		getContentPane().add(updateButton);
 		
 		JLabel lblNewLabel = new JLabel("Welcome Operator");
 		lblNewLabel.setBounds(157, 5, 131, 16);
 		getContentPane().add(lblNewLabel);
 		
-		JButton btnNewButton_3 = new JButton("Logout");
-		btnNewButton_3.setBounds(327, 6, 117, 29);
-		getContentPane().add(btnNewButton_3);
+		LogoutButton = new JButton("Logout");
+		LogoutButton.setBounds(327, 6, 117, 29);
+		getContentPane().add(LogoutButton);
 		
-		JList list = new JList();
-		list.setBounds(24, 59, 406, 134);
-		getContentPane().add(list);
+		JList viewingList = new JList();
+		viewingList.setBounds(24, 59, 406, 134);
+		getContentPane().add(viewingList);
 		
 		JLabel lblNewLabel_1 = new JLabel("Document System Database");
 		lblNewLabel_1.setBounds(127, 31, 176, 16);
 		getContentPane().add(lblNewLabel_1);
 	}
 
+	
+	public JButton getRemoveButton() {
+		return removeButton;
+	}
+
+	public JButton getUpdateButton() {
+		return updateButton;
+	}
+
+	public JButton getLogoutButton() {
+		return LogoutButton;
+	}
+
+	public JButton getAddButton() {
+		return addButton;
+	}
+	
 }

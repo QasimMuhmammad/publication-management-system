@@ -6,11 +6,15 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import controller.Client;
+
 import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
 import java.awt.event.ActionEvent;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
@@ -28,6 +32,9 @@ public class OrdinaryBuyerView extends Views
 	private JButton makeOrderButton;
 	private JButton searchButton;
 	private JButton addToOrderButton;
+	private JList list;
+	private JList list_1; 
+	
 	
 	/**
 	 * Create the frame.
@@ -102,7 +109,7 @@ public class OrdinaryBuyerView extends Views
 		makeOrderButton.setBounds(118, 115, 100, 29);
 		contentPane.add(makeOrderButton);
 		
-		JList list = new JList();
+		list = new JList();
 		list.setBounds(16, 33, 194, 68);
 		contentPane.add(list);
 		
@@ -116,7 +123,7 @@ public class OrdinaryBuyerView extends Views
 		searchButton.setBounds(233, 6, 77, 29);
 		contentPane.add(searchButton);
 		
-		JList list_1 = new JList();
+		list_1  = new JList();
 		list_1.setBounds(243, 44, 201, 57);
 		contentPane.add(list_1);
 		
@@ -172,11 +179,38 @@ public class OrdinaryBuyerView extends Views
 		return textField_2;
 	}
 	
+	public JList getJList()
+	{
+		return list;
+	}
+	
+	public JList getJList_1()
+	{
+		return list_1;
+	}
+	
 	public void showLoginError()
 	{
 		JOptionPane.showMessageDialog(contentPane, "Incorrect username or password", "Login Failed", JOptionPane.ERROR_MESSAGE);
 		
 	}
 	
+	public void registrationMessage(boolean result)
+	{
+		if(result)
+		{
+			JOptionPane.showMessageDialog(contentPane, "You have suceeded in registration!", "Registration Successful", JOptionPane.PLAIN_MESSAGE);
+		}
+		else {
+			JOptionPane.showMessageDialog(contentPane, "Username already in use!", "Registration Failed", JOptionPane.ERROR_MESSAGE);
+		}
+		
+	}
+	
+	public void removeSelected()
+	{
+		
+	}
+
 	
 }

@@ -86,7 +86,7 @@ public class Server
 	 */
 	public static void main(String[] args)
 	{
-		Server myServer = new Server(8085);
+		Server myServer = new Server(8086);
 		myServer.runServer();
 
 	}
