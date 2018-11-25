@@ -1,6 +1,6 @@
 package backend.database.schema;
 
-public interface Schema_Magazine extends Schema_Login
+public interface Schema_Magazine extends Schema_Document
 {
 	// Changes made: None
 	public static final String MAGAZINE_TABLENAME = "magazine";

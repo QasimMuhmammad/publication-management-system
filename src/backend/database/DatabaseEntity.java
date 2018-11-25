@@ -8,6 +8,9 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Properties;
 import java.util.Vector;
 
@@ -20,8 +23,8 @@ import backend.database.schema.Schema_Magazine;
 public class DatabaseEntity implements Database_Configuration, Schema_Login,
 Schema_Book, Schema_Magazine, Schema_Journal
 {
-	private Connection connection;
 	private Properties connectionProps;
+	private Connection connection;
 	private PreparedStatement preparedStatement;
 
 	public DatabaseEntity()
@@ -31,21 +34,12 @@ Schema_Book, Schema_Magazine, Schema_Journal
 		connectionProps.put("password", DB_PASSWORD);
 	}
 
-	public void registerUser(String username, String password)
+	public boolean registerUser(String username, String password)
 	{
 		String sql;
 		
-		// TODO: Check if user already exists.
-
 		try
 		{
-			sql = "INSERT INTO " + LOGIN_TABLENAME + " VALUES" + "(?,?,?)";
-			preparedStatement = connection.prepareStatement(sql);
-			preparedStatement.setString(1, username.toLowerCase());
-			preparedStatement.setString(2, password);
-			preparedStatement.setInt(3, LOGIN_USERS.REGISTERED_BUYER.getId());
-			preparedStatement.executeUpdate();
-			
 			sql = "SELECT * FROM " + LOGIN_TABLENAME + " WHERE " 
 					+ LOGIN_USERNAME 
 					+ "= ?;";
@@ -53,18 +47,24 @@ Schema_Book, Schema_Magazine, Schema_Journal
 			preparedStatement.setString(1, username);
 			ResultSet rSet = preparedStatement.executeQuery();
 			
-			while (rSet.next())
+			if (rSet.getFetchSize() != 0)
 			{
-				System.out.println("Username: " 
-						+ rSet.getString(1) 
-						+ " Password: " 
-						+ rSet.getString(2));
-			}
+				sql = "INSERT INTO " + LOGIN_TABLENAME + " VALUES" + "(?,?,?)";
+				preparedStatement = connection.prepareStatement(sql);
+				preparedStatement.setString(1, username.toLowerCase());
+				preparedStatement.setString(2, password);
+				preparedStatement.setInt(3, LOGIN_USERS.REGISTERED_BUYER.getId());
+				preparedStatement.executeUpdate();
+				
+				return true;
+			}			
 			
 		} catch (SQLException e)
 		{
 			e.printStackTrace();
 		}
+		
+		return false;
 	}
 	
 	public String login(String username, String password)
@@ -168,19 +168,12 @@ Schema_Book, Schema_Magazine, Schema_Journal
 
 				createTables();
 				System.out.println("Populating DB");
+				
+				populateDatabase();
 			}
 
 			preparedStatement = connection.prepareStatement("SHOW TABLES;");
 			rSet = preparedStatement.executeQuery();
-
-			System.out.println("Existing Tables:");
-
-			while (rSet.next())
-			{
-				System.out.println(rSet.getString(1));
-			}
-			
-			registerUser("hi", "bye");
 
 		} catch (SQLException e)
 		{
@@ -197,7 +190,6 @@ Schema_Book, Schema_Magazine, Schema_Journal
 	private void createTables()
 	{
 		String sql, tableName;
-		System.out.print("CREATING TABLES1");
 		
 		tableName = LOGIN_TABLENAME;
 		sql = "CREATE TABLE " + tableName + "("
@@ -205,11 +197,8 @@ Schema_Book, Schema_Magazine, Schema_Journal
 				+ LOGIN_PASSWORD + " VARCHAR(50) NOT NULL, "
 				+ LOGIN_USERTYPE + " INT(1) NOT NULL, "
 				+ "PRIMARY KEY ( " + LOGIN_USERNAME + " ) " + ")";
-
 		executeUpdate(sql);
-		System.out.print("CREATED LOGIN_TABLES");
 		
-		/*
 		String document = DOCUMENT_ID + " INT(13) NOT NULL AUTO_INCREMENT, "
 				+ DOCUMENT_TITLE + " VARCHAR(50) NOT NULL, "
 				+ DOCUMENT_AUTHOR + " VARCHAR(50) NOT NULL, "
@@ -221,77 +210,254 @@ Schema_Book, Schema_Magazine, Schema_Journal
 		sql = "CREATE TABLE " + tableName + "("
 				+ document
 				+ "PRIMARY KEY ( " + DOCUMENT_ID + " ) " + ")";
-		
 		executeUpdate(sql);
-		
-		System.out.print("CREATED DOCUMENT_TABLES");
 		
 		tableName = MAGAZINE_TABLENAME;
 		sql = "CREATE TABLE " + tableName + "("
 				+ document 
-				+ MAGAZINE_ISSUE_ID + " INT(5) NOT NULL "
+				+ MAGAZINE_ISSUE_ID + " INT(5) NOT NULL, "
 				+ "PRIMARY KEY ( " + DOCUMENT_ID + " ) " + ")";
-		
 		executeUpdate(sql);
-		
-		System.out.print("CREATED DOCUMENT_TABLES");
 		
 		tableName = BOOK_TABLENAME;
 		sql = "CREATE TABLE " + tableName + "("
 				+ document 
-				+ BOOK_IS_FICTION + " CHAR(5) NOT NULL "
+				+ BOOK_IS_HARDCOVER + " CHAR(5) NOT NULL, "
+				+ BOOK_IS_FICTION + " CHAR(5) NOT NULL, "
 				+ BOOK_GENRE + " VARCHAR(30) NOT NULL, "
+				+ BOOK_ISBN + " INT(13) NOT NULL, "
 				+ "PRIMARY KEY ( " + DOCUMENT_ID + " ) " + ")";
-		
 		executeUpdate(sql);
-		
-		System.out.print("CREATED MAGAZINE");
-		*/
-		
-		
-		// TODO: create magazine table
-		// TODO: create journal table
-		// TODO: create book table
-//				+ LOGIN_USERNAME + " VARCHAR(50) NOT NULL, "
-//				+ LOGIN_PASSWORD + " VARCHAR(50) NOT NULL, "
-//				+ LOGIN_USERTYPE + " INT(1) NOT NULL,"
-//				+ "PRIMARY KEY ( " + LOGIN_USERNAME + " ) " + ")";
-		
 	}
 
 	private void populateDatabase()
 	{
-		// TODO: Populate the database with data from text files.
-		
 		File file;
-		Path path;
+		DatabaseFileLoader databaseFileLoader = new DatabaseFileLoader();
 		
-		file = new File("src/backend/database/data/login.txt");
-		path = file.toPath();
+		file = new File(LOGIN_PATH);
+		databaseFileLoader.setFile(file);
+		databaseFileLoader.setDatabaseInsertStrategy(
+				new DatabaseInsertUser(connection));
+		databaseFileLoader.performInsertStrategy();
+		
+		file = new File(BOOK_PATH);
+		databaseFileLoader.setFile(file);
+		databaseFileLoader.setDatabaseInsertStrategy(
+				new DatabaseInsertUser(connection));
+		databaseFileLoader.performInsertStrategy();
+		
+		file = new File(MAGAZINE_PATH);
+		databaseFileLoader.setFile(file);
+		databaseFileLoader.setDatabaseInsertStrategy(
+				new DatabaseInsertUser(connection));
+		databaseFileLoader.performInsertStrategy();
+		
+		file = new File(JOURNAL_PATH);
+		databaseFileLoader.setFile(file);
+		databaseFileLoader.setDatabaseInsertStrategy(
+				new DatabaseInsertUser(connection));
+		databaseFileLoader.performInsertStrategy();
+		
+//		File file;
+//		Path path;
+//		
+//		file = new File(LOGIN_PATH);
+//		path = file.toPath();
+//		
+//		try
+//		{
+//			CSVFileReader reader = new CSVFileReader(path);
+//			
+//			while (reader.hasNext())
+//			{
+//				String[] fields = reader.next();
+//				insertUser(fields);
+//			}
+//		} catch (FileNotFoundException e)
+//		{
+//			e.printStackTrace();
+//		}
+//		
+//		file = new File(BOOK_PATH);
+//		path = file.toPath();
+//		
+//		try
+//		{
+//			CSVFileReader reader = new CSVFileReader(path);
+//			
+//			while (reader.hasNext())
+//			{
+//				String[] fields = reader.next();
+//				insertBook(fields);
+//			}
+//		} catch (FileNotFoundException e)
+//		{
+//			e.printStackTrace();
+//		}
+//		
+//		file = new File(MAGAZINE_PATH);
+//		path = file.toPath();
+//		
+//		try
+//		{
+//			CSVFileReader reader = new CSVFileReader(path);
+//			
+//			while (reader.hasNext())
+//			{
+//				String[] fields = reader.next();
+//				insertMagazine(fields);
+//			}
+//		} catch (FileNotFoundException e)
+//		{
+//			e.printStackTrace();
+//		}
+//		
+//		file = new File(JOURNAL_PATH);
+//		path = file.toPath();
+//		
+//		try
+//		{
+//			CSVFileReader reader = new CSVFileReader(path);
+//			
+//			while (reader.hasNext())
+//			{
+//				String[] fields = reader.next();
+//				insertJournal(fields);
+//			}
+//		} catch (FileNotFoundException e)
+//		{
+//			e.printStackTrace();
+//		}
+	}
+	
+	
+	
+	public void insertUser(final String[] user) 
+	{
+		String sql;
+		sql = "INSERT INTO " + LOGIN_TABLENAME + " VALUES" + "(?,?,?)";
 		
 		try
 		{
-			CSVFileReader reader = new CSVFileReader(path);
+			preparedStatement = connection.prepareStatement(sql);
+			preparedStatement.setString(1, user[0].toLowerCase());
+			preparedStatement.setString(2, user[1]);
+			preparedStatement.setInt(3, Integer.parseInt(user[2]));
+			preparedStatement.executeUpdate();
+		} catch (SQLException e)
+		{
+			e.printStackTrace();
+		}
+	}
+	public void insertBook(final String[] book) 
+	{
+		String sql;
+		sql = "INSERT INTO " + BOOK_TABLENAME 
+				+ "(" 
+				+ DOCUMENT_TITLE + ", "
+				+ DOCUMENT_AUTHOR + ", "
+				+ DOCUMENT_CREATION_DATE + ", "
+				+ DOCUMENT_LAST_MODIFIED_DATE + ", "
+				+ DOCUMENT_FILE_EXTENSION + ", "
+				+ BOOK_IS_HARDCOVER + ", "
+				+ BOOK_IS_FICTION + ", "
+				+ BOOK_GENRE + ", "
+				+ BOOK_ISBN
+				+ ")"
+				+ " VALUES" + "(?,?,?,?,?,?,?,?,?)";
+		
+		try
+		{
+			DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 			
-			while (reader.hasNext())
-			{
-				StringBuilder out = new StringBuilder();
-				String[] fields = reader.next();
-				
-				// TODO: Write into the table
-			}
+			preparedStatement = connection.prepareStatement(sql);
+			preparedStatement.setString(1, book[0]);
+			preparedStatement.setString(2, book[1]);
+			preparedStatement.setDate(3, 
+					new java.sql.Date(formatter.parse(book[2]).getTime()));
+			preparedStatement.setDate(4, 
+					new java.sql.Date(formatter.parse(book[3]).getTime()));
+			preparedStatement.setString(5, book[4]);
+			preparedStatement.setString(6, book[5]);
+			preparedStatement.setString(7, book[6]);
+			preparedStatement.setString(8, book[7]);
+			preparedStatement.setInt(9, Integer.parseInt(book[8]));
+			preparedStatement.executeUpdate();
 			
-		} catch (FileNotFoundException e)
+		} catch (SQLException | ParseException e)
 		{
 			e.printStackTrace();
 		}
 	}
 	
-	public void insertUser() {}
-	public void insertBook() {}
-	public void insertMagazine() {}
-	public void insertJournal() {}
+	public void insertMagazine(final String[] magazine) 
+	{
+		String sql;
+		
+		sql = "INSERT INTO " + MAGAZINE_TABLENAME 
+				+ "(" 
+				+ DOCUMENT_TITLE + ", "
+				+ DOCUMENT_AUTHOR + ", "
+				+ DOCUMENT_CREATION_DATE + ", "
+				+ DOCUMENT_LAST_MODIFIED_DATE + ", "
+				+ DOCUMENT_FILE_EXTENSION + ", "
+				+ MAGAZINE_ISSUE_ID
+				+ ")"
+				+ " VALUES" + "(?,?,?,?,?,?)";
+		
+		try
+		{
+			DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+			
+			preparedStatement = connection.prepareStatement(sql);
+			preparedStatement.setString(1, magazine[0]);
+			preparedStatement.setString(2, magazine[1]);
+			preparedStatement.setDate(3, 
+					new java.sql.Date(formatter.parse(magazine[2]).getTime()));
+			preparedStatement.setDate(4, 
+					new java.sql.Date(formatter.parse(magazine[3]).getTime()));
+			preparedStatement.setString(5, magazine[4]);
+			preparedStatement.setInt(6, Integer.parseInt(magazine[5]));
+			preparedStatement.executeUpdate();
+		} catch (SQLException | ParseException e)
+		{
+			e.printStackTrace();
+		}
+	}
 	
+	public void insertJournal(final String[] journal) 
+	{
+		String sql;
+		
+		sql = "INSERT INTO " + JOURNAL_TABLENAME 
+				+ "(" 
+				+ DOCUMENT_TITLE + ", "
+				+ DOCUMENT_AUTHOR + ", "
+				+ DOCUMENT_CREATION_DATE + ", "
+				+ DOCUMENT_LAST_MODIFIED_DATE + ", "
+				+ DOCUMENT_FILE_EXTENSION
+				+ ")"
+				+ " VALUES" + "(?,?,?,?,?)";
+		
+		try
+		{
+			DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+			
+			preparedStatement = connection.prepareStatement(sql);
+			preparedStatement.setString(1, journal[0]);
+			preparedStatement.setString(2, journal[1]);
+			preparedStatement.setDate(3, 
+					new java.sql.Date(formatter.parse(journal[2]).getTime()));
+			preparedStatement.setDate(4, 
+					new java.sql.Date(formatter.parse(journal[3]).getTime()));
+			preparedStatement.setString(5, journal[4]);
+			preparedStatement.executeUpdate();
+		} catch (SQLException | ParseException e)
+		{
+			e.printStackTrace();
+		}
+	}
 
 	/**
 	 * Executes an update using the provided sql string.

@@ -14,4 +14,6 @@ public interface Schema_Login
 	public static final String LOGIN_PASSWORD = "password";
 	public static final String LOGIN_USERTYPE = "usertype";
 	
+	public static final String LOGIN_PATH 
+	= "src/backend/database/data/login.txt";
 }
