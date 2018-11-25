@@ -11,6 +11,7 @@ import controller.Client;
 
 import javax.swing.JTextField;
 import javax.swing.JLabel;
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
@@ -32,8 +33,10 @@ public class OrdinaryBuyerView extends Views
 	private JButton makeOrderButton;
 	private JButton searchButton;
 	private JButton addToOrderButton;
-	private JList list;
-	private JList list_1; 
+	private JList<String> myOrderlist;
+	private JList<String> serachList; 
+	private DefaultListModel<String> myOrderModel;
+	private DefaultListModel<String> mySearchModel;
 	
 	
 	/**
@@ -45,6 +48,8 @@ public class OrdinaryBuyerView extends Views
 		setupBeginning();
 		addLogin();
 		addNormal();
+		myOrderModel = new DefaultListModel<String>();
+		mySearchModel = new DefaultListModel<String>();
 		
 	}
 	
@@ -109,9 +114,9 @@ public class OrdinaryBuyerView extends Views
 		makeOrderButton.setBounds(118, 115, 100, 29);
 		contentPane.add(makeOrderButton);
 		
-		list = new JList();
-		list.setBounds(16, 33, 194, 68);
-		contentPane.add(list);
+		myOrderlist = new JList<String>();
+		myOrderlist.setBounds(16, 33, 194, 68);
+		contentPane.add(myOrderlist);
 		
 		textField_2 = new JTextField();
 		textField_2.setBounds(314, 6, 130, 26);
@@ -123,9 +128,9 @@ public class OrdinaryBuyerView extends Views
 		searchButton.setBounds(233, 6, 77, 29);
 		contentPane.add(searchButton);
 		
-		list_1  = new JList();
-		list_1.setBounds(243, 44, 201, 57);
-		contentPane.add(list_1);
+		serachList  = new JList<String>();
+		serachList.setBounds(243, 44, 201, 57);
+		contentPane.add(serachList);
 		
 		// Add to Order
 		addToOrderButton = new JButton("Add to Order");
@@ -179,15 +184,26 @@ public class OrdinaryBuyerView extends Views
 		return textField_2;
 	}
 	
-	public JList getJList()
+	public JList<String> getOrderJList()
 	{
-		return list;
+		return myOrderlist;
 	}
 	
-	public JList getJList_1()
+	public JList<String> getSearchList()
 	{
-		return list_1;
+		return serachList;
 	}
+	
+	public DefaultListModel<String> getOrderModel()
+	{
+		return myOrderModel;
+	}
+	
+	public DefaultListModel<String> getSearchModel()
+	{
+		return mySearchModel;
+	}
+	
 	
 	public void showLoginError()
 	{
@@ -207,8 +223,15 @@ public class OrdinaryBuyerView extends Views
 		
 	}
 	
+
 	public void removeSelected()
 	{
+		int index = myOrderlist.getSelectedIndex();
+		if(index >= 0)
+		{
+			myOrderModel.removeElementAt(index);
+			myOrderlist.setModel(myOrderModel);
+		}
 		
 	}
 

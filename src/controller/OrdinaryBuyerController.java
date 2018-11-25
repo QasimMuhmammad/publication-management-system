@@ -132,6 +132,11 @@ public class OrdinaryBuyerController
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
+				myViews.getOrderModel().addElement("Hello");
+				myViews.getSearchModel().addElement("Hello2");
+				
+				myViews.getOrderJList().setModel(myViews.getOrderModel());
+				myViews.getSearchList().setModel(myViews.getSearchModel());
 				
 				
 			}
@@ -154,7 +159,13 @@ public class OrdinaryBuyerController
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				// TODO Auto-generated method stub
+				int index = myViews.getSearchList().getSelectedIndex();
+				if(index>=0)
+				{
+					String toAdd = myViews.getSearchModel().getElementAt(index);
+					myViews.getOrderModel().addElement(toAdd);
+				}
+				
 				
 			}
 		});
