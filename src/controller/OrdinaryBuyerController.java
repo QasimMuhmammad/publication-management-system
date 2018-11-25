@@ -23,6 +23,7 @@ public class OrdinaryBuyerController
 	
 	public OrdinaryBuyerController()
 	{
+		System.out.println("IN OBC CONSTRUCTOR");
 		myViews = new OrdinaryBuyerView();
 		loginOrdinaryBuyer();
 		BuyerListeners();
@@ -37,8 +38,7 @@ public class OrdinaryBuyerController
 	
 	void setupViews()
 	{
-		
-		
+
 	}
 	
 	
@@ -52,6 +52,31 @@ public class OrdinaryBuyerController
 			{	
 				String user =  myViews.geTextField().getText();
 				String pass = myViews.geTextField1().getText();
+				
+				myClient.myWriter.println("Incoming Message");
+				myClient.myWriter.println("REGISTER");
+				
+				myClient.myWriter.println(user + " " + pass);
+				System.out.println("Wrote objects to server");
+				
+				try
+				{
+					boolean result = (boolean) myClient.myInputStream.readObject();
+					myViews.registrationMessage(result);
+					
+					
+				} catch (ClassNotFoundException e1)
+				{
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (IOException e1)
+				{
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				System.out.println("Receiving response from server");
+				
+				
 				
 			}
 		});;

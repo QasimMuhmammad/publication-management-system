@@ -75,11 +75,18 @@ public class ServerControl implements Runnable
 			{
 				if (fromClient.readLine().equals("Incoming Message"))
 				{
-					
-					if(fromClient.readLine().equals("LOGIN"))
+					String command = fromClient.readLine();
+					switch (command)
 					{
+					case "LOGIN":
 						System.out.println("LOGIN ATTEMPT");
 						handleLogin();
+						break;
+
+					case "REGISTER":
+						System.out.println("REGISTER ATTEMPT");
+						handleRegistration();
+						break;
 					}
 					
 				}
@@ -113,6 +120,31 @@ public class ServerControl implements Runnable
 			outputMessage.writeObject(result);
 			outputMessage.flush();
 			outputMessage.reset();
+			
+		} catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+	}
+	
+	public void handleRegistration()
+	{
+		System.out.println("Waiting for input from client");
+		String user;
+		try
+		{
+			user = fromClient.readLine();
+			String[] arr = user.split(" ");
+			
+			boolean result = databaseController.registerUser(arr[0], arr[1]);
+			System.out.println("Sending back " + result);
+			outputMessage.writeObject(result);
+			outputMessage.flush();
+			outputMessage.reset();
+			
 			
 		} catch (IOException e)
 		{

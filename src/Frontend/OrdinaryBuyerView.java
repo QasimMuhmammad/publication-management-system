@@ -178,5 +178,18 @@ public class OrdinaryBuyerView extends Views
 		
 	}
 	
+	public void registrationMessage(boolean result)
+	{
+		if(result)
+		{
+			JOptionPane.showMessageDialog(contentPane, "You have suceeded in registration!", "Registration Successful", JOptionPane.PLAIN_MESSAGE);
+		}
+		else {
+			JOptionPane.showMessageDialog(contentPane, "Username already in use!", "Registration Failed", JOptionPane.ERROR_MESSAGE);
+
+		}
+		
+	}
+	
 	
 }
