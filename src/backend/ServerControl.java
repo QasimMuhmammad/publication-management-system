@@ -72,8 +72,9 @@ public class ServerControl implements Runnable
 		{
 			System.out.println("Running SERVER-Q2");
 			try
-			{
-				if (fromClient.readLine().equals("Incoming Message"))
+			{	String intialCommand = fromClient.readLine();
+				
+				if (intialCommand.equals("Incoming Message"))
 				{
 					String command = fromClient.readLine();
 					switch (command)
@@ -87,9 +88,18 @@ public class ServerControl implements Runnable
 						System.out.println("REGISTER ATTEMPT");
 						handleRegistration();
 						break;
+					case "UNSUBSCRIBE":
+						// handleUnsubscribe();
 					}
 					
 				}
+				else if(intialCommand.equals("Setup Message"))
+				{
+					
+					
+				}
+				
+				
 			} catch (IOException e)
 			{
 				e.printStackTrace();
@@ -154,5 +164,7 @@ public class ServerControl implements Runnable
 		
 		
 	}
+
+	
 	
 }

@@ -23,11 +23,6 @@ public class OrdinaryBuyerController
 	
 	public OrdinaryBuyerController()
 	{
-		System.out.println("IN OBC CONSTRUCTOR");
-		myViews = new OrdinaryBuyerView();
-		loginOrdinaryBuyer();
-		BuyerListeners();
-		myViews.setVisible(true);
 	}
 	
 	void setClient(Client myC)
@@ -37,8 +32,11 @@ public class OrdinaryBuyerController
 	}
 	
 	void setupViews()
-	{
-
+	{	
+		myViews = new OrdinaryBuyerView();
+		loginOrdinaryBuyer();
+		BuyerListeners(myViews);
+		myViews.setVisible(true);
 	}
 	
 	
@@ -74,9 +72,7 @@ public class OrdinaryBuyerController
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				System.out.println("Receiving response from server");
-				
-				
+				System.out.println("Receiving response from server");		
 				
 			}
 		});;
@@ -108,9 +104,13 @@ public class OrdinaryBuyerController
 						break;
 
 					case "Registered Buyer":
-						System.out.println("Successful Login!");
+						System.out.println("Successful Login!, Registered User");
 						myViews.dispose();
 						RegisteredBuyer myRegisteredBuyer = new RegisteredBuyer(user, pass,myClient,myOrders);
+						break;
+					case "Operator":
+						myViews.dispose();
+						Operator myOperator = new Operator(myClient);
 						break;
 					}
 					
@@ -124,7 +124,7 @@ public class OrdinaryBuyerController
 		});
 	}
 	
-	void BuyerListeners()
+	void BuyerListeners(OrdinaryBuyerView myViews)
 	{
 		myViews.getSearchButton().addActionListener(new ActionListener()
 		{
@@ -132,7 +132,7 @@ public class OrdinaryBuyerController
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				// TODO Auto-generated method stub
+				
 				
 			}
 		});
@@ -143,7 +143,7 @@ public class OrdinaryBuyerController
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				// TODO Auto-generated method stub
+				//Order myOrder = myViews.getOrder();
 				
 			}
 		});
@@ -165,7 +165,7 @@ public class OrdinaryBuyerController
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				// TODO Auto-generated method stub
+				myViews.removeSelected();
 				
 			}
 		});

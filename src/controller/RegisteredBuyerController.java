@@ -8,23 +8,23 @@ import Frontend.RegisteredView;
 
 public class RegisteredBuyerController extends OrdinaryBuyerController 
 {
-	RegisteredView myView;
+	RegisteredView myViews;
 	
 	public RegisteredBuyerController(String user,String pass,Client oldClient, ArrayList<Order> myOldOrders)
 	{
 		myClient = oldClient;
 		myOrders = myOldOrders;
-		myView = new RegisteredView(user,pass);
-		BuyerListeners();
+		myViews = new RegisteredView(user,pass);
+		BuyerListeners(myViews);
 		RegisteredListeners();
 		NotificationSetup();
-		myView.setVisible(true);
-		myViews.dispose();;
+		myViews.setVisible(true);
+
 	}
 	
 	public void RegisteredListeners()
 	{
-		myView.getUnsubscribeButton().addActionListener(new ActionListener()
+		myViews.getUnsubscribeButton().addActionListener(new ActionListener()
 		{
 			
 			@Override
