@@ -4,9 +4,9 @@ import java.util.ArrayList;
 
 class RegisteredBuyer
 {
-	String userName;
-	String password;
-	RegisteredBuyerController myController;
+	private String userName;
+	private String password;
+	private RegisteredBuyerController myController;
 	
 	public RegisteredBuyer(String user, String pass, Client oldClient, Order myOldOrders)
 	{
@@ -15,6 +15,5 @@ class RegisteredBuyer
 		myController = new RegisteredBuyerController(userName, password,oldClient,myOldOrders);
 		
 	}
-	
 
 }

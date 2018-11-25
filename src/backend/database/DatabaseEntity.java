@@ -1,8 +1,6 @@
 package backend.database;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -14,7 +12,6 @@ import java.text.SimpleDateFormat;
 import java.util.Properties;
 import java.util.Vector;
 
-import backend.database.data.CSVFileReader;
 import backend.database.schema.Schema_Book;
 import backend.database.schema.Schema_Journal;
 import backend.database.schema.Schema_Login;
@@ -140,6 +137,40 @@ public class DatabaseEntity implements Database_Configuration, Schema_Login,
 		return result;	
 	}
 	
+	public boolean unregisterUser(String username, String password)
+	{
+		String sql;
+		boolean returnVal = false;
+		
+		try
+		{
+			sql = "SELECT * FROM " + LOGIN_TABLENAME + " WHERE "
+					+ LOGIN_USERNAME + "= ? AND " + LOGIN_PASSWORD + "= ?;";
+
+			preparedStatement = connection.prepareStatement(sql);
+			preparedStatement.setString(1, username.toLowerCase());
+			preparedStatement.setString(2, password);
+			ResultSet rSet = preparedStatement.executeQuery();
+
+			if (rSet.next())
+			{
+				System.out.println("Unregistering " + username);
+				sql = "DELETE FROM " + LOGIN_TABLENAME + " WHERE " 
+						+ LOGIN_USERNAME + "=?;";
+				preparedStatement = connection.prepareStatement(sql);
+				preparedStatement.setString(1, username.toLowerCase());
+				preparedStatement.executeUpdate();
+				returnVal = true;
+			}
+
+		} catch (SQLException e)
+		{
+			e.printStackTrace();
+		}
+
+		return returnVal;
+	}
+	
 	public boolean registerUser(String username, String password)
 	{
 		String sql;
@@ -185,8 +216,10 @@ public class DatabaseEntity implements Database_Configuration, Schema_Login,
 		String sql;
 		try
 		{
-			sql = "SELECT " + LOGIN_USERNAME + "," + LOGIN_USERTYPE + " FROM "
-					+ LOGIN_TABLENAME + " WHERE " + LOGIN_USERNAME + "= ? AND "
+			sql = "SELECT " + LOGIN_USERNAME + "," 
+					+ LOGIN_USERTYPE + " FROM "
+					+ LOGIN_TABLENAME + " WHERE " 
+					+ LOGIN_USERNAME + "= ? AND "
 					+ LOGIN_PASSWORD + "= ?;";
 			preparedStatement = connection.prepareStatement(sql);
 			preparedStatement.setString(1, username.toLowerCase());
@@ -251,6 +284,7 @@ public class DatabaseEntity implements Database_Configuration, Schema_Login,
 
 	public void prepareDatabase()
 	{
+		
 		try
 		{
 			// See if the publication database exists
@@ -317,11 +351,11 @@ public class DatabaseEntity implements Database_Configuration, Schema_Login,
 		executeUpdate(sql);
 
 		String document = DOCUMENT_ID + " INT(13) NOT NULL AUTO_INCREMENT, "
-				+ DOCUMENT_TITLE + " VARCHAR(50) NOT NULL, " + DOCUMENT_AUTHOR
-				+ " VARCHAR(50) NOT NULL, " + DOCUMENT_CREATION_DATE
-				+ " DATE NOT NULL, " + DOCUMENT_LAST_MODIFIED_DATE
-				+ " DATE NOT NULL, " + DOCUMENT_FILE_EXTENSION
-				+ " VARCHAR(10) NOT NULL, ";
+				+ DOCUMENT_TITLE + " VARCHAR(50) NOT NULL, " 
+				+ DOCUMENT_AUTHOR + " VARCHAR(50) NOT NULL, " 
+				+ DOCUMENT_CREATION_DATE + " DATE NOT NULL, " 
+				+ DOCUMENT_LAST_MODIFIED_DATE + " DATE NOT NULL, " 
+				+ DOCUMENT_FILE_EXTENSION + " VARCHAR(10) NOT NULL, ";
 
 		tableName = JOURNAL_TABLENAME;
 		sql = "CREATE TABLE " + tableName + "(" + document + DOCUMENT_PRICE + " DOUBLE NOT NULL, "+ "PRIMARY KEY ( "

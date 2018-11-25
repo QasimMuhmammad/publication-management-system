@@ -11,6 +11,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import backend.database.shared.Book;
+import backend.database.shared.Document;
 import backend.database.shared.Journal;
 import backend.database.shared.Magazine;
 
@@ -64,11 +65,17 @@ class DatabaseEntityTest
 	void testLoginUser()
 	{
 		String username, password;
-		username = "jimmy";
+		username = "jimmyTest";
 		password = "1";
 		
-		assertEquals(db.login(username, password),
-				LOGIN_USERS.LOGIN_USER_REGISTERED_BUYER);
+		db.registerUser(username, password);
+		
+		assertEquals(LOGIN_USERS.LOGIN_USER_REGISTERED_BUYER,
+				db.login(username, password));
+		
+		db.unregisterUser(username, password);
+		
+		assertEquals(LOGIN_USERS.LOGIN_USER_FAIL, db.login(username, password));
 	}
 	
 	@Test
