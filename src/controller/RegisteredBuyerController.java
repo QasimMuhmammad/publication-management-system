@@ -8,13 +8,16 @@ import Frontend.RegisteredView;
 
 public class RegisteredBuyerController extends OrdinaryBuyerController 
 {
-	RegisteredView myViews;
+	private RegisteredView myViews;
+	private ConcreteRegisteredBuyerObserver observer;
+	
 	
 	public RegisteredBuyerController(String user,String pass,Client oldClient, ArrayList<Order> myOldOrders)
 	{
 		myClient = oldClient;
 		myOrders = myOldOrders;
 		myViews = new RegisteredView(user,pass);
+		observer = new ConcreteRegisteredBuyerObserver();
 		BuyerListeners(myViews);
 		RegisteredListeners();
 		NotificationSetup();
@@ -43,6 +46,11 @@ public class RegisteredBuyerController extends OrdinaryBuyerController
 		
 		
 		
+		
+	}
+	
+	public void handlePromotionList()
+	{
 		
 	}
 }
