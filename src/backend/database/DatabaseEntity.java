@@ -1,8 +1,6 @@
 package backend.database;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -14,7 +12,6 @@ import java.text.SimpleDateFormat;
 import java.util.Properties;
 import java.util.Vector;
 
-import backend.database.data.CSVFileReader;
 import backend.database.schema.Schema_Book;
 import backend.database.schema.Schema_Journal;
 import backend.database.schema.Schema_Login;
@@ -138,6 +135,40 @@ public class DatabaseEntity implements Database_Configuration, Schema_Login,
 		result.addAll(getAllJournals());
 		
 		return result;	
+	}
+	
+	public boolean unregisterUser(String username, String password)
+	{
+		String sql;
+		boolean returnVal = false;
+		
+		try
+		{
+			sql = "SELECT * FROM " + LOGIN_TABLENAME + " WHERE "
+					+ LOGIN_USERNAME + "= ? AND " + LOGIN_PASSWORD + "= ?;";
+
+			preparedStatement = connection.prepareStatement(sql);
+			preparedStatement.setString(1, username.toLowerCase());
+			preparedStatement.setString(2, password);
+			ResultSet rSet = preparedStatement.executeQuery();
+
+			if (rSet.next())
+			{
+				System.out.println("Unregistering " + username);
+				sql = "DELETE FROM " + LOGIN_TABLENAME + " WHERE " 
+						+ LOGIN_USERNAME + "=?;";
+				preparedStatement = connection.prepareStatement(sql);
+				preparedStatement.setString(1, username.toLowerCase());
+				preparedStatement.executeUpdate();
+				returnVal = true;
+			}
+
+		} catch (SQLException e)
+		{
+			e.printStackTrace();
+		}
+
+		return returnVal;
 	}
 	
 	public boolean registerUser(String username, String password)
