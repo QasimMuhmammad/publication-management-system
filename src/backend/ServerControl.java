@@ -101,6 +101,10 @@ public class ServerControl implements Runnable
 					handlieInitialize();
 					
 				}
+				else if(intialCommand.equals("SEARCH DOCUMENTS"))
+				{
+					handleSearch();
+				}
 				
 				
 			} catch (IOException e)
@@ -183,6 +187,30 @@ public class ServerControl implements Runnable
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		
+	}
+	
+	public void handleSearch()
+	{
+		System.out.println("Handling a search request");
+		String docName;
+		try
+		{
+			docName = fromClient.readLine();
+			Vector<Document> mySearchResult = (databaseController.getSearch(docName));
+			System.out.println("Sending back size of " + mySearchResult.size());
+			outputMessage.writeObject(mySearchResult);
+			outputMessage.flush();
+			outputMessage.reset();
+			
+		} catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
 		
 		
 	}
