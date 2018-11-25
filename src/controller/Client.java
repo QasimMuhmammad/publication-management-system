@@ -36,8 +36,6 @@ public class Client
 			System.err.println("Unable to connect to the server.");
 			e.printStackTrace();
 		}
-		
-		
 	}
 	
 	public void func()

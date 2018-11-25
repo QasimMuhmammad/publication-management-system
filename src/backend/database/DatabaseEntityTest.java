@@ -64,5 +64,11 @@ class DatabaseEntityTest
 		assertEquals(db.login(username, password),
 				LOGIN_USERS.LOGIN_USER_REGISTERED_BUYER);
 	}
+	
+	@Test
+	void testGetAllBooks()
+	{
+		
+	}
 
 }
