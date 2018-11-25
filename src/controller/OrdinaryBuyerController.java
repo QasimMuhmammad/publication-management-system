@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Vector;
 
 import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import com.sun.org.apache.bcel.internal.generic.NEW;
@@ -19,7 +20,7 @@ import backend.database.shared.Document;
 
 public class OrdinaryBuyerController
 {
-	ArrayList<Order> myOrders;
+	Order myOrders;
 	OrdinaryBuyerView myViews;
 	Client myClient;
 	
@@ -27,6 +28,7 @@ public class OrdinaryBuyerController
 	
 	public OrdinaryBuyerController()
 	{
+		myOrders = new Order();
 	}
 	
 	void setClient(Client myC)
@@ -120,8 +122,9 @@ public class OrdinaryBuyerController
 						RegisteredBuyer myRegisteredBuyer = new RegisteredBuyer(user, pass,myClient,myOrders);
 						break;
 					case "Operator":
-						myViews.dispose();
+						System.out.println("Detected correct operator login!");
 						Operator myOperator = new Operator(myClient);
+						myViews.dispose();
 						break;
 					}
 					
@@ -168,6 +171,24 @@ public class OrdinaryBuyerController
 			public void actionPerformed(ActionEvent e)
 			{
 				
+				for (int i = 0; i < myViews.getOrderModel().getSize(); i++)
+				{
+					String[] args = myViews.getOrderModel().get(i).split(",");
+					myOrders.processPayment(args);
+				}
+				
+				boolean result = myViews.processPayment(myOrders);
+				if(result)
+				{
+					JOptionPane.showConfirmDialog(null	, myViews, "SuccessfulPayment", JOptionPane.OK_OPTION);	
+					myOrders = new Order();
+					myViews.getOrderModel().clear();
+					myViews.getOrderJList().setModel(myViews.getOrderModel());
+					
+				}
+				else {
+					JOptionPane.showConfirmDialog(null,myViews, "Order was unsuccessful",JOptionPane.OK_OPTION);
+				}
 				
 			}
 		});
@@ -212,28 +233,29 @@ public class OrdinaryBuyerController
 			DefaultListModel<String> myModel = new DefaultListModel<String>();
 			for (int i = 0; i < resultOfSearch.size(); i++)
 			{	
-				String price = " $"+ resultOfSearch.get(i).getPrice().toString();
+				String price = "$"+ resultOfSearch.get(i).getPrice().toString();
 				String type = resultOfSearch.get(i).getType();
 				String toAdd= "";
 				switch (type)
 				{
 				case "Journal":
-					toAdd += "Journal ";
+					toAdd += "Journal,";
 					break;
 
 				case "Book":
-					toAdd += "Book ";
+					toAdd += "Book,";
 					break;
 					
 				case "Magazine":
-					toAdd += "Magazine ";
+					toAdd += "Magazine,";
 					break;
 				}
 				
-				toAdd += resultOfSearch.get(i).getDocumentTitle() + " " + resultOfSearch.get(i).getAuthor() + price;
+				toAdd += resultOfSearch.get(i).getDocumentTitle() + "," + resultOfSearch.get(i).getAuthor() + "," + price;
 				myModel.addElement(toAdd);
 			}
 			
+			myViews.setSearchModel(myModel);
 			myViews.getSearchList().setModel(myModel);
 			
 		} catch (ClassNotFoundException e)

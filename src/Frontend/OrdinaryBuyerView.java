@@ -3,14 +3,18 @@ package Frontend;
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.GridBagLayout;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 
 import controller.Client;
+import controller.Order;
+import javafx.scene.shape.Box;
 
 import javax.swing.JTextField;
 import javax.swing.JViewport;
@@ -20,6 +24,7 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.awt.event.ActionEvent;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
@@ -79,7 +84,7 @@ public class OrdinaryBuyerView extends Views
 		contentPane.add(loginUsernameTextBox);
 		loginUsernameTextBox.setColumns(10);
 		
-		loginPasswordTextbox = new JTextField();
+		loginPasswordTextbox = new JPasswordField();
 		loginPasswordTextbox.setBounds(314, 194, 130, 26);
 		contentPane.add(loginPasswordTextbox);
 		loginPasswordTextbox.setColumns(10);
@@ -257,6 +262,42 @@ public class OrdinaryBuyerView extends Views
 			myOrderlist.setModel(myOrderModel);
 		}
 		
+	}
+
+	public void setSearchModel(DefaultListModel<String> myModel)
+	{
+		mySearchModel = myModel;
+		
+	}
+
+	public boolean processPayment(Order myOrders)
+	{
+		
+		JPanel myPanel= new JPanel();
+		JTextField address = new JTextField(25);
+		JTextField creditCard = new JTextField(16);
+		myPanel.add(new JLabel("Address:"));
+		myPanel.add(address);
+		myPanel.add(new JLabel("Credit Card Number:"));
+		myPanel.add(creditCard);
+		myPanel.add(new JLabel("Order Total:"));
+		DecimalFormat df = new DecimalFormat("#.##");
+		
+		myPanel.add(new JLabel("$" + df.format(myOrders.calculateTotal())));
+		
+		int option = JOptionPane.showConfirmDialog(null	, myPanel, "Process payment", JOptionPane.OK_OPTION);	
+		if(option == JOptionPane.OK_OPTION)
+		{
+			if(creditCard.getText().chars().allMatch(Character::isDigit)== false || creditCard.getText().length() != 16)
+			{
+				return false;
+			}
+			return true;
+		}
+		else {
+			return false;	
+				
+		}
 	}
 
 	

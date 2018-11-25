@@ -8,7 +8,7 @@ class RegisteredBuyer
 	String password;
 	RegisteredBuyerController myController;
 	
-	public RegisteredBuyer(String user, String pass, Client oldClient, ArrayList<Order> myOldOrders)
+	public RegisteredBuyer(String user, String pass, Client oldClient, Order myOldOrders)
 	{
 		userName = user;
 		password = pass;
