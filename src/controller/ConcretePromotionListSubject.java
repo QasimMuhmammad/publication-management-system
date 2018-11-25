@@ -8,9 +8,9 @@ public class ConcretePromotionListSubject implements PromotionListSubject
 	private Vector<String> thePromotionList;
 	private Vector<RegisteredBuyerObserver> observers;
 	
-	public ConcretePromotionListSubject(Vector<String> promotionlist)
+	public ConcretePromotionListSubject()
 	{
-		thePromotionList = promotionlist;
+		thePromotionList = new Vector<>();
 		observers = new Vector<RegisteredBuyerObserver>();
 	}
 	
@@ -31,6 +31,18 @@ public class ConcretePromotionListSubject implements PromotionListSubject
 	{
 		for(int i = 0; i < observers.size(); i++)
 			observers.get(i).update(thePromotionList);
+	}
+	
+	public void addPromotion(String promotion)
+	{
+		thePromotionList.add(promotion);
+		notifyAllObservers();
+	}
+	
+	public void removePromotion(String promotion)
+	{
+		thePromotionList.remove(promotion);
+		notifyAllObservers();
 	}
 
 	

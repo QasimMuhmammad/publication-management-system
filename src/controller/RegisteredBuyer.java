@@ -16,5 +16,9 @@ class RegisteredBuyer
 		
 	}
 	
+	public static void main(String args[])
+	{
+		new RegisteredBuyer("Trevor", "1234", null, null);
+	}
 
 }

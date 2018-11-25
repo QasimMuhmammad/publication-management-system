@@ -3,6 +3,7 @@ package controller;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Vector;
 
 import Frontend.RegisteredView;
 
@@ -16,8 +17,8 @@ public class RegisteredBuyerController extends OrdinaryBuyerController
 	{
 		myClient = oldClient;
 		myOrders = myOldOrders;
-		myViews = new RegisteredView(user,pass);
 		observer = new ConcreteRegisteredBuyerObserver();
+		myViews = new RegisteredView(user,pass,observer.getPromotionList());
 		BuyerListeners(myViews);
 		RegisteredListeners();
 		NotificationSetup();
@@ -33,7 +34,7 @@ public class RegisteredBuyerController extends OrdinaryBuyerController
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				// TODO Auto-generated method stub
+				
 				
 			}
 		});
