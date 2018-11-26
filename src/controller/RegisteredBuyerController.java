@@ -23,6 +23,7 @@ public class RegisteredBuyerController extends OrdinaryBuyerController
 		BuyerListeners(myViews);
 		RegisteredListeners();
 		NotificationSetup();
+		initializeViews(myViews);
 		myViews.setVisible(true);
 
 	}

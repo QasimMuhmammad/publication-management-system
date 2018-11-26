@@ -35,7 +35,7 @@ public class OrdinaryBuyerController
 	{
 		myClient = myC;
 		setupViews();
-		initializeViews();
+		initializeViews(myViews);
 	}
 	
 	void setupViews()
@@ -46,10 +46,10 @@ public class OrdinaryBuyerController
 		myViews.setVisible(true);
 	}
 	
-	void initializeViews()
+	void initializeViews(OrdinaryBuyerView myView)
 	{
 		myClient.myWriter.println("INITIALIZE DOCUMENTS");
-		receiveDocumentObject();
+		receiveDocumentObject(myView);
 		
 	}
 	
@@ -151,12 +151,12 @@ public class OrdinaryBuyerController
 				
 				if(getSearch.equals("RESET"))
 				{
-				initializeViews();	
+				initializeViews(myViews);	
 				}
 				else {
 				myClient.myWriter.println("SEARCH DOCUMENTS");
 				myClient.myWriter.println(getSearch);
-				receiveDocumentObject();
+				receiveDocumentObject(myViews);
 				}
 				
 				
@@ -224,7 +224,7 @@ public class OrdinaryBuyerController
 	}
 	
 	
-	public void receiveDocumentObject()
+	public void receiveDocumentObject(OrdinaryBuyerView myViews)
 	{
 		try
 		{
