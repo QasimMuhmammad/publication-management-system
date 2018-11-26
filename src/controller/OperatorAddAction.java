@@ -1,9 +1,11 @@
 package controller;
 
 import java.io.IOException;
+import java.util.Date;
 
 import Frontend.OperatorView;
 import backend.database.shared.Document;
+import backend.database.shared.Magazine;
 
 public class OperatorAddAction implements OperatorModifyStrategy
 {
@@ -15,16 +17,34 @@ public class OperatorAddAction implements OperatorModifyStrategy
 		String result = myView.chooseDocumentAddType();
 		if(result !=null)
 			myClient.myWriter.println("Operator Add");
-		
-			try
+			Document toAdd = null;
+			switch (result)
 			{
-				//myClient.myOutputStream.writeObject(modifiedDocument);
-				myClient.myOutputStream.flush();
-				myClient.myOutputStream.reset();
+			case "Magazine":
+				toAdd = myView.getMagazine(false);
+				break;
+
+			case "Journal":
+				toAdd = myView.getJournal(false);
+				break;
 			
-			} catch (IOException e)
-			{
-				e.printStackTrace();
+			case "Book":
+				toAdd = myView.getBook(false);
+				break;
+			}
+		
+			if(toAdd != null)
+			{	try
+				{
+					myClient.myOutputStream.writeObject(toAdd);
+					myClient.myOutputStream.flush();
+					myClient.myOutputStream.reset();
+					
+					
+				} catch (IOException e)
+				{
+					e.printStackTrace();
+				}
 			}
 	}
 	

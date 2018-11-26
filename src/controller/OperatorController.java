@@ -51,6 +51,7 @@ public class OperatorController
 			{
 				modifyStrategy = new OperatorAddAction();
 				modifyStrategy.performModifyAction(myConnection, myView);
+				initializeView();
 				
 			}
 		});
@@ -63,6 +64,7 @@ public class OperatorController
 			{
 				modifyStrategy = new OperatorUpdateAction();
 				modifyStrategy.performModifyAction(myConnection, myView);
+				initializeView();
 				
 			}
 		});
