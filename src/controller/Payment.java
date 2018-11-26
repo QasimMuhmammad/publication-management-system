@@ -2,11 +2,15 @@ package controller;
 
 public class Payment
 {
-	double price;
-	String creditCardNum;
+	Double price;
+	
+	public Payment(Double p)
+	{
+		price = p;
+	}
 
 	double calculateWithTax()
 	{
-		return 0.0;
+		return price + (price * 0.05);
 	}
 }

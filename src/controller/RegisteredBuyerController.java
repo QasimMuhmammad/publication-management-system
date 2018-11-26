@@ -13,7 +13,7 @@ public class RegisteredBuyerController extends OrdinaryBuyerController
 	private RegisteredView myViews;
 	
 	
-	public RegisteredBuyerController(String user,String pass,Client oldClient, ArrayList<Order> myOldOrders)
+	public RegisteredBuyerController(String user,String pass,Client oldClient, Order myOldOrders)
 	{
 		myClient = oldClient;
 		myOrders = myOldOrders;

@@ -14,8 +14,10 @@ public class OperatorController
 	OperatorModifyStrategy modifyStrategy;
 	
 	public OperatorController(Client myClient)
-	{
+	{	
+		System.out.println("In operator controller constructor!");
 		myView = new OperatorView();
+		myView.setVisible(true);
 		setupListeners();
 	}
 	

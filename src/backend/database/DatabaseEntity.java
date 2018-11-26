@@ -594,4 +594,82 @@ public class DatabaseEntity implements Database_Configuration, Schema_Login,
 		
 		return result;
 	}
+
+	public Vector<Document> getSearch(String docName)
+	{
+		String sql,sql1,sql2;
+		Vector<Document> myResult = new Vector<Document>();
+		
+		sql = "SELECT * FROM " + BOOK_TABLENAME + " WHERE " + DOCUMENT_TITLE 
+				+ "= ?;";
+		sql1 = "SELECT * FROM " + MAGAZINE_TABLENAME + " WHERE " + DOCUMENT_TITLE 
+				+ "= ?;";
+		sql2 = "SELECT * FROM " + JOURNAL_TABLENAME + " WHERE " + DOCUMENT_TITLE 
+				+ "= ?;";
+		
+		try
+		{
+
+			preparedStatement = connection.prepareStatement(sql);
+			preparedStatement.setString(1, docName);
+			ResultSet rSet = preparedStatement.executeQuery();
+			
+			preparedStatement = connection.prepareStatement(sql1);
+			preparedStatement.setString(1, docName);
+			ResultSet rSet1 = preparedStatement.executeQuery();
+			
+			preparedStatement = connection.prepareStatement(sql2);
+			preparedStatement.setString(1, docName);
+			ResultSet rSet2 = preparedStatement.executeQuery();
+			
+			while(rSet.next())
+			{
+				myResult.add(new Book(
+						rSet.getInt(1),
+						rSet.getString(2),
+						rSet.getString(3),
+						rSet.getDate(4),
+						rSet.getDate(5),
+						rSet.getString(6),
+						rSet.getString(7).equals("true") ? true : false,
+						rSet.getString(8).equals("true") ? true : false,
+						rSet.getString(9),
+						rSet.getInt(10),rSet.getDouble(11)));
+			}
+			
+			while(rSet1.next())
+			{
+				myResult.add(new Magazine(
+						rSet1.getInt(1),
+						rSet1.getString(2),
+						rSet1.getString(3),
+						rSet1.getDate(4),
+						rSet1.getDate(5),
+						rSet1.getString(6),
+						rSet1.getInt(7),rSet1.getDouble(8)));
+				
+			}
+			
+			while(rSet2.next())
+			{
+				myResult.add(new Journal(
+						rSet2.getInt(1),
+						rSet2.getString(2),
+						rSet2.getString(3),
+						rSet2.getDate(4),
+						rSet2.getDate(5),
+						rSet2.getString(6),rSet2.getDouble(7)));
+			}
+			
+		} catch (SQLException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		
+		
+		
+		return myResult;
+	}
 }

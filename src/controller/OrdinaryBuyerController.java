@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Vector;
 
+import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import com.sun.org.apache.bcel.internal.generic.NEW;
@@ -20,7 +22,7 @@ import backend.database.shared.Promotion;
 
 public class OrdinaryBuyerController
 {
-	ArrayList<Order> myOrders;
+	Order myOrders;
 	OrdinaryBuyerView myViews;
 	Client myClient;
 	
@@ -28,6 +30,7 @@ public class OrdinaryBuyerController
 	
 	public OrdinaryBuyerController()
 	{
+		myOrders = new Order();
 	}
 	
 	void setClient(Client myC)
@@ -48,43 +51,7 @@ public class OrdinaryBuyerController
 	void initializeViews()
 	{
 		myClient.myWriter.println("INITIALIZE DOCUMENTS");
-		try
-		{
-			Vector<Document> resultOfSearch = (Vector<Document>)myClient.myInputStream.readObject();
-			for (int i = 0; i < resultOfSearch.size(); i++)
-			{	
-				String price = " $ " + "Price is "+ resultOfSearch.get(i).getPrice().toString();
-				String type = resultOfSearch.get(i).getType();
-				String toAdd= "";
-				switch (type)
-				{
-				case "Journal":
-					toAdd += "Journal ";
-					break;
-
-				case "Book":
-					toAdd += "Book ";
-					break;
-					
-				case "Magazine":
-					toAdd += "Magazine ";
-					break;
-				}
-				
-				toAdd += resultOfSearch.get(i).getDocumentTitle() + " " + resultOfSearch.get(i).getAuthor() + price;
-				myViews.getSearchModel().addElement(toAdd);
-			}
-			myViews.getSearchList().setModel(myViews.getSearchModel());
-			
-		} catch (ClassNotFoundException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		receiveDocumentObject();
 		
 	}
 	
@@ -96,8 +63,8 @@ public class OrdinaryBuyerController
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{	
-				String user =  myViews.geTextField().getText();
-				String pass = myViews.geTextField1().getText();
+				String user =  myViews.getUserTextField().getText();
+				String pass = myViews.getPasswordTextField().getText();
 				
 				myClient.myWriter.println("Incoming Message");
 				myClient.myWriter.println("REGISTER");
@@ -131,8 +98,8 @@ public class OrdinaryBuyerController
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				String user =  myViews.geTextField().getText();
-				String pass = myViews.geTextField1().getText();
+				String user =  myViews.getUserTextField().getText();
+				String pass = myViews.getPasswordTextField().getText();
 				System.out.println("Writing to server for a login request, user is "+ user + "password is"+ pass );
 				myClient.myWriter.println("Incoming Message");
 				myClient.myWriter.println("LOGIN");
@@ -161,8 +128,9 @@ public class OrdinaryBuyerController
 						System.out.println("ReceeekjjehjjekrhjrqeSKLDJsdkjdkemsmdcccdkks");
 						break;
 					case "Operator":
-						myViews.dispose();
+						System.out.println("Detected correct operator login!");
 						Operator myOperator = new Operator(myClient);
+						myViews.dispose();
 						break;
 					}
 					
@@ -184,11 +152,19 @@ public class OrdinaryBuyerController
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				myViews.getOrderModel().addElement("Hello");
-				myViews.getSearchModel().addElement("Hello2");
+				String getSearch = myViews.getSearchTextField().getText();
+				System.out.println("Searching.. " + getSearch);
 				
-				myViews.getOrderJList().setModel(myViews.getOrderModel());
-				myViews.getSearchList().setModel(myViews.getSearchModel());
+				if(getSearch.equals(""))
+				{
+				initializeViews();	
+				}
+				else {
+				myClient.myWriter.println("SEARCH DOCUMENTS");
+				myClient.myWriter.println(getSearch);
+				receiveDocumentObject();
+				
+				}
 				
 				
 			}
@@ -201,6 +177,24 @@ public class OrdinaryBuyerController
 			public void actionPerformed(ActionEvent e)
 			{
 				
+				for (int i = 0; i < myViews.getOrderModel().getSize(); i++)
+				{
+					String[] args = myViews.getOrderModel().get(i).split(",");
+					myOrders.processPayment(args);
+				}
+				
+				boolean result = myViews.processPayment(myOrders);
+				if(result)
+				{
+					JOptionPane.showConfirmDialog(null	, myViews, "SuccessfulPayment", JOptionPane.OK_OPTION);	
+					myOrders = new Order();
+					myViews.getOrderModel().clear();
+					myViews.getOrderJList().setModel(myViews.getOrderModel());
+					
+				}
+				else {
+					JOptionPane.showConfirmDialog(null,myViews, "Order was unsuccessful",JOptionPane.OK_OPTION);
+				}
 				
 			}
 		});
@@ -237,4 +231,47 @@ public class OrdinaryBuyerController
 	}
 	
 	
+	public void receiveDocumentObject()
+	{
+		try
+		{
+			Vector<Document> resultOfSearch = (Vector<Document>)myClient.myInputStream.readObject();
+			DefaultListModel<String> myModel = new DefaultListModel<String>();
+			for (int i = 0; i < resultOfSearch.size(); i++)
+			{	
+				String price = "$"+ resultOfSearch.get(i).getPrice().toString();
+				String type = resultOfSearch.get(i).getType();
+				String toAdd= "";
+				switch (type)
+				{
+				case "Journal":
+					toAdd += "Journal,";
+					break;
+
+				case "Book":
+					toAdd += "Book,";
+					break;
+					
+				case "Magazine":
+					toAdd += "Magazine,";
+					break;
+				}
+				
+				toAdd += resultOfSearch.get(i).getDocumentTitle() + "," + resultOfSearch.get(i).getAuthor() + "," + price;
+				myModel.addElement(toAdd);
+			}
+			
+			myViews.setSearchModel(myModel);
+			myViews.getSearchList().setModel(myModel);
+			
+		} catch (ClassNotFoundException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 }

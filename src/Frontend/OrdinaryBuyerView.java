@@ -3,14 +3,18 @@ package Frontend;
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.GridBagLayout;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 
 import controller.Client;
+import controller.Order;
+import javafx.scene.shape.Box;
 
 import javax.swing.JTextField;
 import javax.swing.JViewport;
@@ -20,6 +24,7 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.awt.event.ActionEvent;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
@@ -29,9 +34,9 @@ import java.awt.Dimension;
 
 public class OrdinaryBuyerView extends Views
 {
-	private JTextField textField;
-	private JTextField textField_1;
-	private JTextField textField_2;
+	private JTextField loginUsernameTextBox;
+	private JTextField loginPasswordTextbox;
+	private JTextField searchTextBox;
 	private JButton loginButton;
 	private JButton RegisterButton;
 	private JButton removeButton;
@@ -42,6 +47,7 @@ public class OrdinaryBuyerView extends Views
 	private JList<String> serachList; 
 	private DefaultListModel<String> myOrderModel;
 	private DefaultListModel<String> mySearchModel;
+	private JScrollPane searchScroll;
 	
 	
 	/**
@@ -73,15 +79,15 @@ public class OrdinaryBuyerView extends Views
 	void addLogin(){
 		
 		
-		textField = new JTextField();
-		textField.setBounds(314, 163, 130, 26);
-		contentPane.add(textField);
-		textField.setColumns(10);
+		loginUsernameTextBox = new JTextField();
+		loginUsernameTextBox.setBounds(314, 163, 130, 26);
+		contentPane.add(loginUsernameTextBox);
+		loginUsernameTextBox.setColumns(10);
 		
-		textField_1 = new JTextField();
-		textField_1.setBounds(314, 194, 130, 26);
-		contentPane.add(textField_1);
-		textField_1.setColumns(10);
+		loginPasswordTextbox = new JPasswordField();
+		loginPasswordTextbox.setBounds(314, 194, 130, 26);
+		contentPane.add(loginPasswordTextbox);
+		loginPasswordTextbox.setColumns(10);
 		
 		JLabel lblNewLabel = new JLabel("Username");
 		lblNewLabel.setBounds(250, 168, 89, 16);
@@ -120,20 +126,22 @@ public class OrdinaryBuyerView extends Views
 		contentPane.add(makeOrderButton);
 		
 		myOrderlist = new JList<String>();
-		myOrderlist.setBounds(16, 33, 194, 68);
+		//myOrderlist.setBounds(16, 33, 194, 68);
 		myOrderlist.setFont(new Font("Courier New", Font.PLAIN, 8));
 		myOrderlist.setVisibleRowCount(30);
-		myOrderlist.setPrototypeCellValue("123456789123456789123456789123456789123456789");
 		
-		JScrollPane myScrollBar = new JScrollPane(myOrderlist);
+		JScrollPane myScrollBar = new JScrollPane();
+		myScrollBar.setBounds(16, 33, 194, 68);
 		myScrollBar.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		myScrollBar.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-		contentPane.add(myOrderlist);
+		myScrollBar.setViewportView(myOrderlist);
 		
-		textField_2 = new JTextField();
-		textField_2.setBounds(314, 6, 130, 26);
-		contentPane.add(textField_2);
-		textField_2.setColumns(10);
+		contentPane.add(myScrollBar);
+		
+		searchTextBox = new JTextField();
+		searchTextBox.setBounds(314, 6, 130, 26);
+		contentPane.add(searchTextBox);
+		searchTextBox.setColumns(10);
 		
 		// Search Button
 		searchButton = new JButton("Search");
@@ -141,17 +149,16 @@ public class OrdinaryBuyerView extends Views
 		contentPane.add(searchButton);
 		
 		serachList  = new JList<String>();
-		serachList.setBounds(243, 44, 201, 57);
+
 		serachList.setFont(new Font("Courier New", Font.PLAIN, 8));
 		serachList.setPrototypeCellValue("123456789123456789123456789123456789123456789");
 		
-		JScrollPane searchScroll = new JScrollPane(serachList);
+		searchScroll = new JScrollPane();
+		searchScroll.setBounds(243, 44, 201, 57);
 		searchScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		searchScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-		searchScroll.setPreferredSize(new Dimension(20, 40));
-		serachList.setVisibleRowCount(8);
-		
-		contentPane.add(serachList);
+		searchScroll.setViewportView(serachList);
+
 		contentPane.add(searchScroll);
 		
 		// Add to Order
@@ -191,19 +198,19 @@ public class OrdinaryBuyerView extends Views
 		return addToOrderButton;
 	}
 	
-	public JTextField geTextField()
+	public JTextField getUserTextField()
 	{
-		return textField;
+		return loginUsernameTextBox;
 	}
 	
-	public JTextField geTextField1()
+	public JTextField getPasswordTextField()
 	{
-		return textField_1;
+		return loginPasswordTextbox;
 	}
 	
-	public JTextField geTextField2()
+	public JTextField getSearchTextField()
 	{
-		return textField_2;
+		return searchTextBox;
 	}
 	
 	public JList<String> getOrderJList()
@@ -255,6 +262,42 @@ public class OrdinaryBuyerView extends Views
 			myOrderlist.setModel(myOrderModel);
 		}
 		
+	}
+
+	public void setSearchModel(DefaultListModel<String> myModel)
+	{
+		mySearchModel = myModel;
+		
+	}
+
+	public boolean processPayment(Order myOrders)
+	{
+		
+		JPanel myPanel= new JPanel();
+		JTextField address = new JTextField(25);
+		JTextField creditCard = new JTextField(16);
+		myPanel.add(new JLabel("Address:"));
+		myPanel.add(address);
+		myPanel.add(new JLabel("Credit Card Number:"));
+		myPanel.add(creditCard);
+		myPanel.add(new JLabel("Order Total:"));
+		DecimalFormat df = new DecimalFormat("#.##");
+		
+		myPanel.add(new JLabel("$" + df.format(myOrders.calculateTotal())));
+		
+		int option = JOptionPane.showConfirmDialog(null	, myPanel, "Process payment", JOptionPane.OK_OPTION);	
+		if(option == JOptionPane.OK_OPTION)
+		{
+			if(creditCard.getText().chars().allMatch(Character::isDigit)== false || creditCard.getText().length() != 16)
+			{
+				return false;
+			}
+			return true;
+		}
+		else {
+			return false;	
+				
+		}
 	}
 
 	
