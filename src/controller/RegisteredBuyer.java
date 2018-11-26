@@ -24,4 +24,8 @@ class RegisteredBuyer
 		myController.setPromotionsList(myPromotionList);
 	}
 
+	public RegisteredBuyerController getRegisteredBuyerController()
+	{
+		return myController;
+	}
 }

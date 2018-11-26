@@ -96,10 +96,11 @@ public class ServerControl implements Runnable
 			System.out.println("Running SERVER-Q2");
 			try
 			{	String intialCommand = fromClient.readLine();
-				
+				System.out.println("Initial Command is " + intialCommand);
 				if (intialCommand.equals("Incoming Message"))
 				{
 					String command = fromClient.readLine();
+					System.out.println("INcoming message is " + command);
 					switch (command)
 					{
 					case "LOGIN":
@@ -111,10 +112,14 @@ public class ServerControl implements Runnable
 						handleRegistration();
 						break;
 					case "UNSUBSCRIBE":
-						 handleUnsubscribe();
+						System.out.println("UNSUBSCRIBE ATTEMPT");
+						handleUnsubscribe();
 						break;
 					case "LOGOUT":
 						handleLogout();
+						break;
+					default:
+						System.err.println("Error: Don't know what " + command + " means...");
 						break;
 					}
 					
@@ -128,7 +133,10 @@ public class ServerControl implements Runnable
 				{
 					handleSearch();
 				}
-				
+				else 
+				{
+					System.err.println("Error: What does " + intialCommand + " mean?");
+				}
 				
 			} catch (IOException e)
 			{
@@ -155,6 +163,7 @@ public class ServerControl implements Runnable
 				e.printStackTrace();
 			}
 		}
+		System.out.println("Successfully deleted " + username + " from the database");
 		handleLogout();
 	}
 
@@ -265,7 +274,7 @@ public class ServerControl implements Runnable
 		try
 		{
 			docName = fromClient.readLine();
-			Vector<Document> mySearchResult = (databaseController.getSearch(docName));
+			Vector<Document> mySearchResult = (databaseEntity.getSearch(docName));
 			System.out.println("Sending back size of " + mySearchResult.size());
 			outputMessage.writeObject(mySearchResult);
 			outputMessage.flush();

@@ -2,8 +2,8 @@ package controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.Vector;
+
 
 import Frontend.RegisteredView;
 import backend.database.shared.Promotion;
@@ -33,7 +33,14 @@ public class RegisteredBuyerController extends OrdinaryBuyerController
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				
+				myClient.myWriter.flush();
+				myClient.myWriter.println("Incoming Message");
+				myClient.myWriter.println("UNSUBSCRIBE");
+				myViews.dispose();
+				OrdinaryBuyerController ordinaryBuyerController = new OrdinaryBuyerController();
+				ordinaryBuyerController.setClient(new Client("localhost", 9000));
+				ordinaryBuyerController.setupViews();
+				ordinaryBuyerController.initializeViews();
 				
 			}
 		});
