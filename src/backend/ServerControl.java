@@ -173,7 +173,7 @@ public class ServerControl implements Runnable
 	private void handleOperatorModify()
 	{
 		try
-		{
+		{	
 			Document received = (Document) inputMessage.readObject();
 			databaseEntity.modifyDocument(received);
 			
@@ -193,8 +193,17 @@ public class ServerControl implements Runnable
 	{
 		try
 		{
-			Document received = (Document) inputMessage.readObject();
-			databaseEntity.addDocument(received);
+			Object in = inputMessage.readObject();
+			if (in.getClass() == String.class)
+			{
+				System.out.println(in);
+				System.out.println(in.getClass());
+			} else
+			{
+				Document received = (Document) in;
+				databaseEntity.addDocument(received);
+			}
+			
 			
 		} catch (ClassNotFoundException e)
 		{
