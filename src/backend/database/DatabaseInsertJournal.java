@@ -1,6 +1,7 @@
 package backend.database;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.text.DateFormat;
@@ -8,6 +9,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 import backend.database.schema.Schema_Journal;
+import backend.database.shared.Journal;
 
 public class DatabaseInsertJournal implements DatabaseInsertStrategy,
 Schema_Journal
@@ -21,7 +23,7 @@ Schema_Journal
 	}
 	
 	@Override
-	public void insert(String[] journal)
+	public void insertFromFile(String[] journal)
 	{
 		String sql;
 		
@@ -55,5 +57,4 @@ Schema_Journal
 			e.printStackTrace();
 		}
 	}
-
 }

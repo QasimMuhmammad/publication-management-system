@@ -8,6 +8,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 import backend.database.schema.Schema_Magazine;
+import backend.database.shared.Magazine;
 
 public class DatabaseInsertMagazine implements DatabaseInsertStrategy, 
 Schema_Magazine
@@ -21,7 +22,7 @@ Schema_Magazine
 	}
 	
 	@Override
-	public void insert(String[] magazine)
+	public void insertFromFile(String[] magazine)
 	{
 		String sql;
 		
@@ -57,5 +58,6 @@ Schema_Magazine
 			e.printStackTrace();
 		}
 	}
+
 
 }

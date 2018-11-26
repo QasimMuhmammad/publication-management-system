@@ -3,11 +3,7 @@ package backend.database;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 
-import backend.database.schema.Schema_Book;
 import backend.database.schema.Schema_Login;
 
 public class DatabaseInsertUser implements DatabaseInsertStrategy, Schema_Login
@@ -21,7 +17,7 @@ public class DatabaseInsertUser implements DatabaseInsertStrategy, Schema_Login
 	}
 	
 	@Override
-	public void insert(String[] user)
+	public void insertFromFile(String[] user)
 	{
 		String sql;
 		sql = "INSERT INTO " + LOGIN_TABLENAME + " VALUES" + "(?,?,?)";

@@ -4,6 +4,10 @@ import java.util.Date;
 
 public class Magazine extends Document
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int issueId;
 	
 	public Magazine(int id, String title, String author, Date creation,
@@ -16,6 +20,11 @@ public class Magazine extends Document
 	public int getIssueId()
 	{
 		return issueId;
+	}
+	
+	public void setIssueId(int issueId)
+	{
+		this.issueId = issueId;
 	}
 	
 	@Override

@@ -6,10 +6,13 @@ import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import backend.database.schema.Schema_Book;
+import backend.database.shared.Book;
 
-public class DatabaseInsertBook implements DatabaseInsertStrategy, Schema_Book
+public class DatabaseInsertBook implements DatabaseInsertStrategy,
+Schema_Book
 {
 	private Connection connection;
 	private PreparedStatement preparedStatement;
@@ -20,7 +23,7 @@ public class DatabaseInsertBook implements DatabaseInsertStrategy, Schema_Book
 	}
 	
 	@Override
-	public void insert(String[] book)
+	public void insertFromFile(String[] book)
 	{
 		String sql;
 		sql = "INSERT INTO " + BOOK_TABLENAME 
