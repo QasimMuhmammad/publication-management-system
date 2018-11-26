@@ -164,8 +164,8 @@ public class DatabaseEntity implements Database_Configuration, Schema_Login,
 					+ DOCUMENT_CREATION_DATE + "=?, "
 					+ DOCUMENT_LAST_MODIFIED_DATE + "=?, "
 					+ DOCUMENT_FILE_EXTENSION + "=?, "
-					+ DOCUMENT_PRICE + "=?;"
-					+ " WHERE " + DOCUMENT_ID + "=?l";
+					+ DOCUMENT_PRICE + "=?"
+					+ " WHERE " + DOCUMENT_ID + "=?;";
 			
 			try
 			{
@@ -236,7 +236,8 @@ public class DatabaseEntity implements Database_Configuration, Schema_Login,
 					+ DOCUMENT_LAST_MODIFIED_DATE + "=?, "
 					+ DOCUMENT_FILE_EXTENSION + "=?, "
 					+ MAGAZINE_ISSUE_ID + "=?, "
-					+ DOCUMENT_PRICE  + "=?;";
+					+ DOCUMENT_PRICE  + "=?"
+					+ " WHERE " + DOCUMENT_ID + "=?;";
 			
 			try
 			{
@@ -249,6 +250,7 @@ public class DatabaseEntity implements Database_Configuration, Schema_Login,
 						(java.sql.Date) magazine.getLastModifiedDate());
 				preparedStatement.setString(5, magazine.getFileExtension());
 				preparedStatement.setInt(6, magazine.getIssueId());
+				preparedStatement.setInt(7, magazine.getDocumentId());
 				preparedStatement.executeUpdate();
 			} catch (SQLException e)
 			{
