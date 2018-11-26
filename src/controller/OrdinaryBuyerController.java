@@ -88,7 +88,7 @@ public class OrdinaryBuyerController
 				System.out.println("Receiving response from server");		
 				
 			}
-		});;
+		});
 	
 		myViews.getLoginButton().addActionListener(new ActionListener()
 		{

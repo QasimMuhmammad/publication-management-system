@@ -30,7 +30,7 @@ public class DatabaseFileLoader
 			while (reader.hasNext())
 			{
 				String[] fields = reader.next();
-				strategy.insert(fields);
+				strategy.insertFromFile(fields);
 			}
 		} catch (FileNotFoundException e)
 		{

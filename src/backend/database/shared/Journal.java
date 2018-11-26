@@ -4,6 +4,11 @@ import java.util.Date;
 
 public class Journal extends Document
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public Journal(int id, String title, String author, Date creation, 
 			Date lastModified, String fileExtension, Double price)
 	{

@@ -1,10 +1,13 @@
 package backend.database.shared;
 
-import java.io.Serializable;
 import java.util.Date;
 
 public class Book extends Document
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private boolean isHardCover;
 	private boolean isFiction;
 	private String genre;
@@ -42,6 +45,27 @@ public class Book extends Document
 		return isbn;
 	}
 	
+	public void setIsbn(int isbn)
+	{
+		this.isbn = isbn;
+	}
+	
+	
+	public void setHardCover(boolean isHardCover)
+	{
+		this.isHardCover = isHardCover;
+	}
+
+	public void setFiction(boolean isFiction)
+	{
+		this.isFiction = isFiction;
+	}
+
+	public void setGenre(String genre)
+	{
+		this.genre = genre;
+	}
+
 	@Override
 	public String toString()
 	{

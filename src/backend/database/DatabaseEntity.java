@@ -2,6 +2,7 @@ package backend.database;
 
 import java.io.File;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -34,6 +35,229 @@ public class DatabaseEntity implements Database_Configuration, Schema_Login,
 		connectionProps.put("user", DB_USERNAME);
 		connectionProps.put("password", DB_PASSWORD);
 	}
+	
+	public void addDocument(Document document)
+	{
+		Class<? extends Document> class1 = document.getClass();
+		
+		if (class1 == Journal.class)
+		{
+			Journal journal = (Journal) document;
+			String sql;
+			
+			sql = "INSERT INTO " + JOURNAL_TABLENAME 
+					+ "(" 
+					+ DOCUMENT_TITLE + ", "
+					+ DOCUMENT_AUTHOR + ", "
+					+ DOCUMENT_CREATION_DATE + ", "
+					+ DOCUMENT_LAST_MODIFIED_DATE + ", "
+					+ DOCUMENT_FILE_EXTENSION+ ", "
+					+ DOCUMENT_PRICE
+					+ ")"
+					+ " VALUES" + "(?,?,?,?,?,?)";
+			
+			try
+			{
+				preparedStatement = connection.prepareStatement(sql);
+				preparedStatement.setString(1, journal.getDocumentTitle());
+				preparedStatement.setString(2, journal.getAuthor());
+				preparedStatement.setDate(3, 
+						(Date) journal.getCreationDate());
+				preparedStatement.setDate(4, 
+						(Date) journal.getLastModifiedDate());
+				preparedStatement.setString(5, journal.getFileExtension());
+				preparedStatement.setDouble(6, journal.getPrice());
+				preparedStatement.executeUpdate();
+			} catch (SQLException e)
+			{
+				e.printStackTrace();
+			}
+		} else if (class1 == Book.class)
+		{
+			Book book = (Book) document;
+			String sql;
+			sql = "INSERT INTO " + BOOK_TABLENAME 
+					+ "(" 
+					+ DOCUMENT_TITLE + ", "
+					+ DOCUMENT_AUTHOR + ", "
+					+ DOCUMENT_CREATION_DATE + ", "
+					+ DOCUMENT_LAST_MODIFIED_DATE + ", "
+					+ DOCUMENT_FILE_EXTENSION + ", "
+					+ BOOK_IS_HARDCOVER + ", "
+					+ BOOK_IS_FICTION + ", "
+					+ BOOK_GENRE + ", "
+					+ BOOK_ISBN + ", "
+					+ DOCUMENT_PRICE
+					+ ")"
+					+ " VALUES" + "(?,?,?,?,?,?,?,?,?,?)";
+			
+			try
+			{
+				preparedStatement = connection.prepareStatement(sql);
+				preparedStatement.setString(1, book.getDocumentTitle());
+				preparedStatement.setString(2, book.getAuthor());
+				preparedStatement.setDate(3, 
+						(java.sql.Date) book.getCreationDate());
+				preparedStatement.setDate(4, 
+						(java.sql.Date) book.getLastModifiedDate());
+				preparedStatement.setString(5, book.getFileExtension());
+				preparedStatement.setBoolean(6, book.isHardCover());
+				preparedStatement.setBoolean(7, book.isFiction());
+				preparedStatement.setString(8, book.getGenre());
+				preparedStatement.setInt(9, book.getIsbn());
+				preparedStatement.setDouble(10, book.getPrice());
+				preparedStatement.executeUpdate();
+				
+			} catch (SQLException e)
+			{
+				e.printStackTrace();
+			}
+		} else if (class1 == Magazine.class)
+		{
+			Magazine magazine = (Magazine) document;
+
+			String sql;
+			
+			sql = "INSERT INTO " + MAGAZINE_TABLENAME 
+					+ "(" 
+					+ DOCUMENT_TITLE + ", "
+					+ DOCUMENT_AUTHOR + ", "
+					+ DOCUMENT_CREATION_DATE + ", "
+					+ DOCUMENT_LAST_MODIFIED_DATE + ", "
+					+ DOCUMENT_FILE_EXTENSION + ", "
+					+ MAGAZINE_ISSUE_ID + ", "
+					+ DOCUMENT_PRICE
+					+ ")"
+					+ " VALUES" + "(?,?,?,?,?,?,?)";
+			
+			try
+			{
+				preparedStatement = connection.prepareStatement(sql);
+				preparedStatement.setString(1, magazine.getDocumentTitle());
+				preparedStatement.setString(2, magazine.getAuthor());
+				preparedStatement.setDate(3, 
+						(java.sql.Date) magazine.getCreationDate());
+				preparedStatement.setDate(4, 
+						(java.sql.Date) magazine.getLastModifiedDate());
+				preparedStatement.setString(5, magazine.getFileExtension());
+				preparedStatement.setInt(6, magazine.getIssueId());
+				preparedStatement.executeUpdate();
+			} catch (SQLException e)
+			{
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public void modifyDocument(Document document)
+	{
+		Class<? extends Document> class1 = document.getClass();
+		
+		if (class1 == Journal.class)
+		{
+			Journal journal = (Journal) document;
+			String sql;
+			
+			sql = "UPDATE " + JOURNAL_TABLENAME + " SET "
+					+ DOCUMENT_TITLE + "=?, "
+					+ DOCUMENT_AUTHOR + "=?, "
+					+ DOCUMENT_CREATION_DATE + "=?, "
+					+ DOCUMENT_LAST_MODIFIED_DATE + "=?, "
+					+ DOCUMENT_FILE_EXTENSION + "=?, "
+					+ DOCUMENT_PRICE + "=?;";
+			
+			try
+			{
+				preparedStatement = connection.prepareStatement(sql);
+				preparedStatement.setString(1, journal.getDocumentTitle());
+				preparedStatement.setString(2, journal.getAuthor());
+				preparedStatement.setDate(3, 
+						(Date) journal.getCreationDate());
+				preparedStatement.setDate(4, 
+						(Date) journal.getLastModifiedDate());
+				preparedStatement.setString(5, journal.getFileExtension());
+				preparedStatement.setDouble(6, journal.getPrice());
+				preparedStatement.executeUpdate();
+			} catch (SQLException e)
+			{
+				e.printStackTrace();
+			}
+		} else if (class1 == Book.class)
+		{
+			System.out.println("ISABOOK");
+			Book book = (Book) document;
+			String sql;
+			sql = "UPDATE " + BOOK_TABLENAME + " SET "
+					+ DOCUMENT_TITLE + "=?, "
+					+ DOCUMENT_AUTHOR + "=?, "
+					+ DOCUMENT_CREATION_DATE + "=?, "
+					+ DOCUMENT_LAST_MODIFIED_DATE + "=?, "
+					+ DOCUMENT_FILE_EXTENSION + "=?, "
+					+ BOOK_IS_HARDCOVER + "=?, "
+					+ BOOK_IS_FICTION + "=?, "
+					+ BOOK_GENRE + "=?, "
+					+ BOOK_ISBN + "=?, "
+					+ DOCUMENT_PRICE + "=? "
+					+ " WHERE " + DOCUMENT_ID + "=?;";
+			try
+			{
+				preparedStatement = connection.prepareStatement(sql);
+				preparedStatement.setString(1, book.getDocumentTitle());
+				preparedStatement.setString(2, book.getAuthor());
+				preparedStatement.setDate(3, 
+						(java.sql.Date) book.getCreationDate());
+				preparedStatement.setDate(4, 
+						(java.sql.Date) book.getLastModifiedDate());
+				preparedStatement.setString(5, book.getFileExtension());
+				preparedStatement.setBoolean(6, book.isHardCover());
+				preparedStatement.setBoolean(7, book.isFiction());
+				preparedStatement.setString(8, book.getGenre());
+				preparedStatement.setInt(9, book.getIsbn());
+				preparedStatement.setDouble(10, book.getPrice());
+				preparedStatement.setInt(11, book.getDocumentId());
+				preparedStatement.executeUpdate();
+				
+			} catch (SQLException e)
+			{
+				e.printStackTrace();
+			}
+		} else if (class1 == Magazine.class)
+		{
+			Magazine magazine = (Magazine) document;
+
+			String sql;
+			
+			sql = "UPDATE " + MAGAZINE_TABLENAME + " SET "
+					+ DOCUMENT_TITLE + "=?, "
+					+ DOCUMENT_AUTHOR + "=?, "
+					+ DOCUMENT_CREATION_DATE + "=?, "
+					+ DOCUMENT_LAST_MODIFIED_DATE + "=?, "
+					+ DOCUMENT_FILE_EXTENSION + "=?, "
+					+ MAGAZINE_ISSUE_ID + "=?, "
+					+ DOCUMENT_PRICE  + "=?;";
+			
+			try
+			{
+				preparedStatement = connection.prepareStatement(sql);
+				preparedStatement.setString(1, magazine.getDocumentTitle());
+				preparedStatement.setString(2, magazine.getAuthor());
+				preparedStatement.setDate(3, 
+						(java.sql.Date) magazine.getCreationDate());
+				preparedStatement.setDate(4, 
+						(java.sql.Date) magazine.getLastModifiedDate());
+				preparedStatement.setString(5, magazine.getFileExtension());
+				preparedStatement.setInt(6, magazine.getIssueId());
+				preparedStatement.executeUpdate();
+			} catch (SQLException e)
+			{
+				e.printStackTrace();
+			}
+		} else {
+			System.out.println("Unknown document.");
+		}
+	}
+	
+	
 
 	public Vector<Book> getAllBooks()
 	{

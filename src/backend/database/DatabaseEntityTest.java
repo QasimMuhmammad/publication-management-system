@@ -107,5 +107,71 @@ class DatabaseEntityTest
 //			System.out.println(magazine);
 		}
 	}
+	
+	@Test
+	void testBookSearchAndUpdate()
+	{
+		Double price = 62.42;
+		Book book = new Book(300, "Mary had a Little Lamb",
+				"Sheep Killas", new java.sql.Date(2018, 10, 24), 
+				new java.sql.Date(2018, 10, 24),
+					"mobi", false, true, "Children's Bedtime Story", 123907541, 
+					price);
+		db.addDocument(book);
+		Vector<Document> result = db.getSearch(book.getDocumentTitle());
+		
+		assertTrue(result.size() > 0);
+		
+		for (Document document : result)
+		{
+			System.out.println(document);
+		}
+		
+		price = 29.99;
+		book = (Book) result.get(0);
+		book.setPrice(price);
+		
+		
+		db.modifyDocument(book);
+		
+		result = db.getSearch(book.getDocumentTitle());
+		Book resultBook = (Book) result.get(0);
+		for (Document document : result)
+		{
+			System.out.println(document);
+		}
+		
+		assertEquals(price, resultBook.getPrice());
+		
+	}
+	
+	@Test
+	public void testJournalSearchAndUpdate()
+	{
+		Journal journal = new Journal(981247, "Hello World", "!me", 
+				new java.sql.Date(2018, 11, 24),
+				new java.sql.Date(2018, 11, 24), "c", 33.00);
+		
+		db.addDocument(journal);
+		
+		Vector<Document> result;
+		result = db.getSearch(journal.getDocumentTitle());
+		journal = (Journal) result.get(0);
+		
+		assertNotNull(journal);
+		
+		String newTitle = "FiFo";
+		String newAuthor = "LiFo Stacko Gang";
+		journal.setDocumentTitle(newTitle);
+		
+		journal.setAuthor(newAuthor);
+		db.modifyDocument(journal);
+		
+		result = db.getSearch(journal.getDocumentTitle());
+		journal = (Journal) result.get(0);
+		
+		assertEquals(newTitle, journal.getDocumentTitle());
+		assertEquals(newAuthor, journal.getAuthor());
+	}
 
 }
