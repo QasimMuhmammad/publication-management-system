@@ -14,7 +14,8 @@ public class OperatorUpdateAction implements OperatorModifyStrategy
 		int result = myView.getList().getSelectedIndex();
 		
 		if(result >=0)
-			myClient.myWriter.println("Operator Modify");
+		{
+			
 			String val[] = myView.getModel().get(result).split(",");
 			String results = val[1];
 		
@@ -36,7 +37,7 @@ public class OperatorUpdateAction implements OperatorModifyStrategy
 		
 			if(toAdd != null)
 			{	try
-				{	
+				{	myClient.myWriter.println("Operator Modify");
 					System.out.println("Sending a" + toAdd.getType());
 					myClient.myOutputStream.writeObject(toAdd);
 					myClient.myOutputStream.flush();
@@ -48,6 +49,7 @@ public class OperatorUpdateAction implements OperatorModifyStrategy
 					e.printStackTrace();
 				}
 			}
+		}
 		
 	}
 
