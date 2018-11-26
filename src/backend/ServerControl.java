@@ -105,6 +105,10 @@ public class ServerControl implements Runnable
 				{
 					handleSearch();
 				}
+				else if(intialCommand.equals("Operator Remove"))
+				{
+					handleOperatorRemove();
+				}
 				
 				
 			} catch (IOException e)
@@ -121,6 +125,22 @@ public class ServerControl implements Runnable
 	}
 
 	
+	private void handleOperatorRemove()
+	{
+		System.out.println("Operator Removing");
+		try
+		{
+			String[] toRemove = fromClient.readLine().split(",");
+			databaseController.removeDocument(toRemove);
+			
+		} catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+
 	public void handleLogin()
 	{
 		try

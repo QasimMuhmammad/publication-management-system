@@ -611,4 +611,42 @@ public class DatabaseEntity implements Database_Configuration, Schema_Login,
 		
 		return myResult;
 	}
+
+	public void removeDocument(String[] toRemove)
+	{
+		String sql = "";
+		String table = "";
+		switch (toRemove[1])
+		{
+		case "Book":
+			table = BOOK_TABLENAME;
+			break;
+
+		case "Journal":
+			table = JOURNAL_TABLENAME;
+			break;
+		case "Magazine":
+			table = MAGAZINE_TABLENAME;
+			break;
+		}
+		
+		sql = "DELETE FROM " + table + " WHERE " 
+				+ DOCUMENT_ID + "=?;";
+		try
+		{
+			preparedStatement = connection.prepareStatement(sql);
+			preparedStatement.setInt(1, Integer.valueOf(toRemove[0]));
+			preparedStatement.executeUpdate();
+		} catch (NumberFormatException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+	}
 }

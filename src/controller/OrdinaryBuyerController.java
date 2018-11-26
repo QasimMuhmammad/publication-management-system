@@ -149,7 +149,7 @@ public class OrdinaryBuyerController
 				String getSearch = myViews.getSearchTextField().getText();
 				System.out.println("Searching.. " + getSearch);
 				
-				if(getSearch.equals(""))
+				if(getSearch.equals("RESET"))
 				{
 				initializeViews();	
 				}
@@ -157,7 +157,6 @@ public class OrdinaryBuyerController
 				myClient.myWriter.println("SEARCH DOCUMENTS");
 				myClient.myWriter.println(getSearch);
 				receiveDocumentObject();
-				
 				}
 				
 				

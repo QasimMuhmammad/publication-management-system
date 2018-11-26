@@ -11,10 +11,15 @@ public class OperatorRemoveAction implements OperatorModifyStrategy
 	public void performModifyAction(Client myClient, OperatorView myView)
 	{
 		// TODO Auto-generated method stub
-				//int toDelete = myView.getRemovedDocument();
-				myClient.myWriter.println("");
-				myClient.myWriter.println("");
-				//myClient.myWriter.println("");	
+		int toDelete = myView.getList().getSelectedIndex();
+		if(toDelete >=0)
+		{
+			myClient.myWriter.println("Operator Remove");
+			String[] args = myView.getModel().getElementAt(toDelete).split(",");
+			
+			String toSend = args[0] + "," + args[1];
+			myClient.myWriter.println(toSend);
+		}
 					
 
 	}
