@@ -5,10 +5,10 @@ import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.Vector;
 
 import backend.database.DatabaseEntity;
-import backend.database.shared.Book;
 import backend.database.shared.Document;
 
 /**
@@ -75,7 +75,8 @@ public class ServerControl implements Runnable
 		{
 			System.out.println("Running SERVER-Q2");
 			try
-			{	String intialCommand = fromClient.readLine();
+			{	
+				String intialCommand = fromClient.readLine();
 				
 				if (intialCommand.equals("Incoming Message"))
 				{
@@ -107,14 +108,14 @@ public class ServerControl implements Runnable
 				}
 				
 				
-			} catch (IOException e)
+			} catch (SocketException e)
 			{
-				e.printStackTrace();
-			} catch (NullPointerException e)
-			{
-				System.out.println("A client has closed");
 				break;
 			}
+			catch (IOException e)
+			{
+				e.printStackTrace();
+			} 
 
 		}
 
@@ -143,8 +144,6 @@ public class ServerControl implements Runnable
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
 	}
 	
 	public void handleRegistration()
@@ -161,15 +160,10 @@ public class ServerControl implements Runnable
 			outputMessage.writeObject(result);
 			outputMessage.flush();
 			outputMessage.reset();
-			
-			
 		} catch (IOException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
 	}
 
 	public void handlieInitialize()

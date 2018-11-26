@@ -11,7 +11,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import backend.database.shared.Book;
-import backend.database.shared.Document;
 import backend.database.shared.Journal;
 import backend.database.shared.Magazine;
 

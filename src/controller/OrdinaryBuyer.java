@@ -10,7 +10,6 @@ class OrdinaryBuyer
 		myController.setClient(new Client("localhost", 9000));
 	}
 	
-	
 	public static void main(String[] args)
 	{
 		OrdinaryBuyer startUp = new OrdinaryBuyer();
