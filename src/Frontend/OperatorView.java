@@ -417,6 +417,7 @@ public class OperatorView extends Views
 	    	
 	    	
 	    	Magazine myMag = new Magazine(docID, ti, au, create, modify, extension, issueID,pDouble);
+	    	System.out.println("Returning price of magazine " + myMag.getPrice());
 	    	return myMag;
 	    }
 	    

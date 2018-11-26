@@ -192,8 +192,10 @@ public class ServerControl implements Runnable
 	private void handleOperatorAdd()
 	{
 		try
-		{
+		{	
+			System.out.println("In operator add");
 			Object in = inputMessage.readObject();
+			System.out.println(in);
 			if (in.getClass() == String.class)
 			{
 				System.out.println(in);
