@@ -1,6 +1,9 @@
 package controller;
 
 import java.util.ArrayList;
+import java.util.Vector;
+
+import backend.database.shared.Promotion;
 
 class RegisteredBuyer
 {
@@ -14,6 +17,11 @@ class RegisteredBuyer
 		password = pass;
 		myController = new RegisteredBuyerController(userName, password,oldClient,myOldOrders);
 		
+	}
+
+	public void setPromotionsList(Vector<Promotion> myPromotionList)
+	{
+		myController.setPromotionsList(myPromotionList);
 	}
 
 }

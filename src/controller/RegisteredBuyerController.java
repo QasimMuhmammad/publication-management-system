@@ -6,25 +6,23 @@ import java.util.ArrayList;
 import java.util.Vector;
 
 import Frontend.RegisteredView;
+import backend.database.shared.Promotion;
 
 public class RegisteredBuyerController extends OrdinaryBuyerController 
 {
 	private RegisteredView myViews;
-	private ConcreteRegisteredBuyerObserver observer;
-	private ConcretePromotionListSubject promotionList;
 	
 	
 	public RegisteredBuyerController(String user,String pass,Client oldClient, ArrayList<Order> myOldOrders)
 	{
 		myClient = oldClient;
 		myOrders = myOldOrders;
-		promotionList = new ConcretePromotionListSubject();
-		myViews = new RegisteredView(user,pass,promotionList.getPromotionList());
+		myViews = new RegisteredView(user,pass);
 		BuyerListeners(myViews);
 		RegisteredListeners();
 		NotificationSetup();
 		myViews.setVisible(true);
-
+		System.out.println("RB VISIBLE YES:" );
 	}
 	
 	public void RegisteredListeners()
@@ -54,5 +52,10 @@ public class RegisteredBuyerController extends OrdinaryBuyerController
 	public void handlePromotionList()
 	{
 		
+	}
+
+	public void setPromotionsList(Vector<Promotion> myPromotionList)
+	{
+		myViews.setPromotionList(myPromotionList);
 	}
 }
