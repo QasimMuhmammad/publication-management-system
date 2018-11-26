@@ -15,8 +15,10 @@ import com.sun.org.apache.bcel.internal.generic.NEW;
 
 import Frontend.OrdinaryBuyerView;
 import Frontend.Views;
+import backend.database.LOGIN_USERS;
 import backend.database.shared.Book;
 import backend.database.shared.Document;
+import backend.database.shared.Promotion;
 
 public class OrdinaryBuyerController
 {
@@ -107,19 +109,23 @@ public class OrdinaryBuyerController
 					myClient.myWriter.println(user + " " + pass);
 					System.out.println("Wrote objects to server");
 					
+					myClient.myOutputStream.reset();
 					String result = (String) myClient.myInputStream.readObject();
 					System.out.println("Receiving response from server");
-
+					System.out.println("Response: " + result);
 					switch (result)
 					{
 					case "Failure":
 						myViews.showLoginError();
 						break;
 
-					case "Registered Buyer":
+					case LOGIN_USERS.LOGIN_USER_REGISTERED_BUYER:
 						System.out.println("Successful Login!, Registered User");
 						myViews.dispose();
-						RegisteredBuyer myRegisteredBuyer = new RegisteredBuyer(user, pass,myClient,myOrders);
+						RegisteredBuyer myRegisteredBuyer = new RegisteredBuyer(user, pass, myClient, myOrders);
+						myRegisteredBuyer.setPromotionsList((Vector<Promotion>) myClient.myInputStream.readObject());
+						
+						System.out.println("ReceeekjjehjjekrhjrqeSKLDJsdkjdkemsmdcccdkks");
 						break;
 					case "Operator":
 						System.out.println("Detected correct operator login!");

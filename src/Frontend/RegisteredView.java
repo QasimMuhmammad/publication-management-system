@@ -10,20 +10,24 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
 
+import backend.database.shared.Promotion;
+
 public class RegisteredView extends OrdinaryBuyerView
 {	
 	String username;
 	String password;
 	private JButton btnUnsubscribe;
-	private JList<String> promotionsDisplay;
-	private DefaultListModel<String> promotionsModel;
+	private JList<Promotion> promotionsDisplay;
+	private DefaultListModel<Promotion> promotionsModel;
 	private JScrollPane scrollPane;
 	
-	public RegisteredView(String user, String pass, Vector<String> thePromotionList )
+	public RegisteredView(String user, String pass)
 	{
+		promotionsModel = new DefaultListModel<Promotion>();
+		promotionsDisplay = new JList<Promotion>(promotionsModel);
 		setupBeginning();
 		addNormal();
-		setPromotionList(thePromotionList);
+//		setPromotionList(thePromotionList);
 		addRegisteredParts();
 		username = user;
 		password = pass;
@@ -35,7 +39,9 @@ public class RegisteredView extends OrdinaryBuyerView
 		lblNewLabel_3.setBounds(77, 150, 81, 16);
 		contentPane.add(lblNewLabel_3);
 		
+		scrollPane = new JScrollPane();
 		scrollPane.setBounds(16, 178, 194, 77);
+		scrollPane.setViewportView(promotionsDisplay);
 		contentPane.add(scrollPane);
 		
 		btnUnsubscribe = new JButton("Unsubscribe");
@@ -43,14 +49,12 @@ public class RegisteredView extends OrdinaryBuyerView
 		contentPane.add(btnUnsubscribe);
 	}
 	
-	public void setPromotionList(Vector<String> thePromotionList)
+	public void setPromotionList(Vector<Promotion> thePromotionList)
 	{
-		promotionsModel = new DefaultListModel<String>();
+		promotionsModel.clear();
 		for(int i = 0; i < thePromotionList.size(); i++)
 			promotionsModel.addElement(thePromotionList.get(i));
-		promotionsDisplay = new JList<String>(promotionsModel);
-		scrollPane = new JScrollPane();
-		scrollPane.setViewportView(promotionsDisplay);
+		
 	}
 	
 	public JButton getUnsubscribeButton()
@@ -65,7 +69,7 @@ public class RegisteredView extends OrdinaryBuyerView
 	
 	public static void main(String[] args)
 	{
-		Views view = new RegisteredView("Qasim","qazxsw", null);
+		Views view = new RegisteredView("Qasim","qazxsw");
 		view.setVisible(true);
 	}
 }

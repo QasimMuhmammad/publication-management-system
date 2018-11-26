@@ -7,6 +7,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import backend.database.DatabaseEntity;
+import controller.ConcretePromotionListSubject;
 
 public class Server
 {
@@ -22,22 +23,29 @@ public class Server
 	
 	private Thread socketAcceptor;
 	
-	private DatabaseEntity databaseController;
+	private DatabaseEntity databaseEntity;
+	
+	private ConcretePromotionListSubject subject;
 	
 	/**
 	 * Starts the server
 	 */
 	public Server(int port)
 	{
+		subject = new ConcretePromotionListSubject();
+		
 		try
 		{
 			serverSocket = new ServerSocket(port);
 			serverSocket.setSoTimeout(1000);
 			pool = Executors.newCachedThreadPool();
-			databaseController= new DatabaseEntity();
-			databaseController.connect();
-			databaseController.destroyDatabase();
-			databaseController.prepareDatabase();
+			databaseEntity= new DatabaseEntity();
+			databaseEntity.connect();
+			databaseEntity.destroyDatabase();
+			databaseEntity.prepareDatabase();
+			
+			subject.setPromotionList(databaseEntity.getAllPromotions());
+			
 			System.out.println("Server set up");
 		} catch (IOException e)
 		{
@@ -59,7 +67,7 @@ public class Server
 	public void shutdown()
 	{
 		pool.shutdown();
-		databaseController.disconnect();
+		databaseEntity.disconnect();
 		socketAcceptor.interrupt();
 	}
 	
@@ -79,7 +87,7 @@ public class Server
 					System.out.println("Connected Client");
 					
 					ServerControl handleMessage = new ServerControl(
-							mySocket, databaseController);
+							mySocket, databaseEntity, subject);
 					System.out.println("About to execute Client");
 					pool.execute(handleMessage);
 				} catch (SocketTimeoutException e)

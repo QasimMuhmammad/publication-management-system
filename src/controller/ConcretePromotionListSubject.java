@@ -2,15 +2,16 @@ package controller;
 
 import java.util.Vector;
 
+import backend.database.shared.Promotion;
+
 public class ConcretePromotionListSubject implements PromotionListSubject
 {
 
-	private Vector<String> thePromotionList;
+	private Vector<Promotion> thePromotionList;
 	private Vector<RegisteredBuyerObserver> allRegisteredBuyers;
 	
 	public ConcretePromotionListSubject()
 	{
-		thePromotionList = new Vector<String>();
 		allRegisteredBuyers = new Vector<RegisteredBuyerObserver>();
 	}
 	
@@ -33,19 +34,25 @@ public class ConcretePromotionListSubject implements PromotionListSubject
 			allRegisteredBuyers.get(i).update(thePromotionList);
 	}
 	
-	public void addPromotion(String promotion)
+	public void setPromotionList(Vector<Promotion> list)
+	{
+		thePromotionList = list;
+		notifyAllObservers();
+	}
+	
+	public void addPromotion(Promotion promotion)
 	{
 		thePromotionList.add(promotion);
 		notifyAllObservers();
 	}
 	
-	public void removePromotion(String promotion)
+	public void removePromotion(Promotion promotion)
 	{
 		thePromotionList.remove(promotion);
 		notifyAllObservers();
 	}
 	
-	public Vector<String> getPromotionList()
+	public Vector<Promotion> getPromotionList()
 	{
 		return thePromotionList;
 	}

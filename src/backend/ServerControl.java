@@ -8,12 +8,20 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.util.Vector;
 
+import com.mysql.cj.xdevapi.DbDoc;
+
 import backend.database.DatabaseEntity;
+import backend.database.LOGIN_USERS;
+import backend.database.shared.Book;
 import backend.database.shared.Document;
+import backend.database.shared.Promotion;
+import controller.ConcretePromotionListSubject;
+import controller.ConcreteRegisteredBuyerObserver;
+import controller.PromotionListSubject;
 
 /**
  * Used by server to enable multi-threaded clients
- * 
+ *
  * @author qasimmuhammad
  *
  */
@@ -30,34 +38,47 @@ public class ServerControl implements Runnable
 	 */
 	ObjectInputStream inputMessage;
 
+	Socket socket;
+
+	private ConcreteRegisteredBuyerObserver observer;
+
+	private String username;
+	private String password;
+	private String type;
+
 	/**
 	 * Connects the reader to tell server when the client sends a message
 	 */
 	BufferedReader fromClient;
-	
-	private DatabaseEntity databaseController;
+
+	private DatabaseEntity databaseEntity;
+
+	private ConcretePromotionListSubject promotionList;
 
 	/**
 	 * Initializes the Control object
-	 * 
+	 *
 	 * @param toConnect
 	 *            connects the server to ClientGUI
 	 */
-	public ServerControl(Socket toConnect, DatabaseEntity db)
+	public ServerControl(Socket toConnect, DatabaseEntity db,
+			ConcretePromotionListSubject subject)
 	{
+		this.promotionList = subject;
+		this.socket = toConnect;
 		try
 		{
 			System.out.println("Setting up server control");
 			outputMessage = new ObjectOutputStream(toConnect.getOutputStream());
 			System.out.println("Setting up server control1");
-			
+
 			// HANGS HERE
 			inputMessage = new ObjectInputStream(toConnect.getInputStream());
-			
+
 			System.out.println("Setting up server control2");
 			fromClient = new BufferedReader(
 					new InputStreamReader(toConnect.getInputStream()));
-			databaseController = db;
+			databaseEntity = db;
 			System.out.println("Finished Setting up server control3");
 
 		} catch (IOException e)
@@ -75,32 +96,39 @@ public class ServerControl implements Runnable
 		{
 			System.out.println("Running SERVER-Q2");
 			try
-			{	
-				String intialCommand = fromClient.readLine();
-				
+			{	String intialCommand = fromClient.readLine();
+				System.out.println("Initial Command is " + intialCommand);
 				if (intialCommand.equals("Incoming Message"))
 				{
 					String command = fromClient.readLine();
+					System.out.println("INcoming message is " + command);
 					switch (command)
 					{
 					case "LOGIN":
 						System.out.println("LOGIN ATTEMPT");
 						handleLogin();
 						break;
-
 					case "REGISTER":
 						System.out.println("REGISTER ATTEMPT");
 						handleRegistration();
 						break;
 					case "UNSUBSCRIBE":
-						// handleUnsubscribe();
+						System.out.println("UNSUBSCRIBE ATTEMPT");
+						handleUnsubscribe();
+						break;
+					case "LOGOUT":
+						handleLogout();
+						break;
+					default:
+						System.err.println("Error: Don't know what " + command + " means...");
+						break;
 					}
-					
+
 				}
 				else if(intialCommand.equals("INITIALIZE DOCUMENTS"))
 				{
 					handlieInitialize();
-					
+
 				}
 				else if(intialCommand.equals("SEARCH DOCUMENTS"))
 				{
@@ -110,8 +138,12 @@ public class ServerControl implements Runnable
 				{
 					handleOperatorRemove();
 				}
-				
-				
+
+				else
+				{
+					System.err.println("Error: What does " + intialCommand + " mean?");
+				}
+
 			} catch (SocketException e)
 			{
 				break;
@@ -119,13 +151,44 @@ public class ServerControl implements Runnable
 			catch (IOException e)
 			{
 				e.printStackTrace();
-			} 
-
+			}
 		}
+}
 
+	private void handleUnsubscribe()
+	{
+		if (!databaseEntity.unregisterUser(username, password))
+		{
+			System.err.println("Unable to unregister user " + username);
+			try
+			{
+				throw new Exception();
+			} catch (Exception e)
+			{
+				e.printStackTrace();
+			}
+		}
+		System.out.println("Successfully deleted " + username + " from the database");
+		handleLogout();
 	}
 
-	
+	private void handleLogout()
+	{
+
+		if (type.equals(LOGIN_USERS.LOGIN_USER_REGISTERED_BUYER))
+		{
+			promotionList.unregister(observer);
+		}
+		try
+		{
+			socket.close();
+		} catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+	}
+
+
 	private void handleOperatorRemove()
 	{
 		System.out.println("Operator Removing");
@@ -133,13 +196,13 @@ public class ServerControl implements Runnable
 		{
 			String[] toRemove = fromClient.readLine().split(",");
 			databaseController.removeDocument(toRemove);
-			
+
 		} catch (IOException e)
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 	}
 
 	public void handleLogin()
@@ -149,23 +212,39 @@ public class ServerControl implements Runnable
 			System.out.println("Waiting for input from client");
 			String user = fromClient.readLine();
 			String[] arr = user.split(" ");
-			
+			username = arr[0];
+			password = arr[1];
 			System.out.println("Recieved Username" + arr[0] + " and Password " + arr[1]);
-			String result = databaseController.login(arr[0],arr[1]);
-			
-			System.out.println("Sending back " + result);
+			type = databaseEntity.login(arr[0],arr[1]);
 
-			outputMessage.writeObject(result);
+
+			System.out.println("Sending back " + type);
 			outputMessage.flush();
 			outputMessage.reset();
-			
+
+			outputMessage.writeObject(type);
+
+			if (type.equals(LOGIN_USERS.LOGIN_USER_REGISTERED_BUYER))
+			{
+				// TODO: Add a logout command to unregister a user when they
+				// log out.
+				observer = new ConcreteRegisteredBuyerObserver(promotionList,
+						socket);
+
+				outputMessage.writeObject(databaseEntity.getAllPromotions());
+				outputMessage.flush();
+				outputMessage.reset();
+
+			}
+
+
+
 		} catch (IOException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void handleRegistration()
 	{
 		System.out.println("Waiting for input from client");
@@ -174,8 +253,8 @@ public class ServerControl implements Runnable
 		{
 			user = fromClient.readLine();
 			String[] arr = user.split(" ");
-			
-			boolean result = databaseController.registerUser(arr[0], arr[1]);
+
+			boolean result = databaseEntity.registerUser(arr[0], arr[1]);
 			System.out.println("Sending back " + result);
 			outputMessage.writeObject(result);
 			outputMessage.flush();
@@ -189,8 +268,8 @@ public class ServerControl implements Runnable
 	public void handlieInitialize()
 	{
 		System.out.println("Initializing all the documents");
-		Vector<Document> myBooks = databaseController.getAllDocuments();
-		
+		Vector<Document> myBooks = databaseEntity.getAllDocuments();
+
 		try
 		{
 			outputMessage.writeObject(myBooks);
@@ -201,10 +280,10 @@ public class ServerControl implements Runnable
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
+
+
 	}
-	
+
 	public void handleSearch()
 	{
 		System.out.println("Handling a search request");
@@ -212,21 +291,21 @@ public class ServerControl implements Runnable
 		try
 		{
 			docName = fromClient.readLine();
-			Vector<Document> mySearchResult = (databaseController.getSearch(docName));
+			Vector<Document> mySearchResult = (databaseEntity.getSearch(docName));
 			System.out.println("Sending back size of " + mySearchResult.size());
 			outputMessage.writeObject(mySearchResult);
 			outputMessage.flush();
 			outputMessage.reset();
-			
+
 		} catch (IOException e)
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
-		
-		
+
+
+
+
 	}
-	
+
 }

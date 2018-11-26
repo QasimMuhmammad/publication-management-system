@@ -17,13 +17,15 @@ import backend.database.schema.Schema_Book;
 import backend.database.schema.Schema_Journal;
 import backend.database.schema.Schema_Login;
 import backend.database.schema.Schema_Magazine;
+import backend.database.schema.Schema_Promotion;
 import backend.database.shared.Book;
 import backend.database.shared.Document;
 import backend.database.shared.Journal;
 import backend.database.shared.Magazine;
+import backend.database.shared.Promotion;
 
 public class DatabaseEntity implements Database_Configuration, Schema_Login,
-		Schema_Book, Schema_Magazine, Schema_Journal
+		Schema_Book, Schema_Magazine, Schema_Journal, Schema_Promotion
 {
 	private Properties connectionProps;
 	private Connection connection;
@@ -432,7 +434,6 @@ public class DatabaseEntity implements Database_Configuration, Schema_Login,
 		}
 
 		return returnVal;
-
 	}
 
 	public String login(String username, String password)
@@ -599,6 +600,14 @@ public class DatabaseEntity implements Database_Configuration, Schema_Login,
 				+ BOOK_ISBN + " INT(13) NOT NULL, " +DOCUMENT_PRICE + " DOUBLE NOT NULL, " + "PRIMARY KEY ( "
 				+ DOCUMENT_ID + " ) " + ")";
 		executeUpdate(sql);
+		
+		tableName = PROMOTION_TABLENAME;
+		
+		sql = "CREATE TABLE " + tableName + "(" 
+				+ PROMOTION_ID + " INT(10) NOT NULL AUTO_INCREMENT,"
+				+ PROMOTION_STRING + " VARCHAR(255) NOT NULL, "
+				+ " PRIMARY KEY ( " + PROMOTION_ID + " ) " + " );";
+		executeUpdate(sql);
 	}
 
 	private void populateDatabase()
@@ -628,6 +637,12 @@ public class DatabaseEntity implements Database_Configuration, Schema_Login,
 		databaseFileLoader.setFile(file);
 		databaseFileLoader.setDatabaseInsertStrategy(
 				new DatabaseInsertJournal(connection));
+		databaseFileLoader.performInsertStrategy();
+		
+		file = new File(PROMOTION_PATH);
+		databaseFileLoader.setFile(file);
+		databaseFileLoader.setDatabaseInsertStrategy(
+				new DatabaseInsertPromotion(connection));
 		databaseFileLoader.performInsertStrategy();
 	}
 
@@ -739,6 +754,26 @@ public class DatabaseEntity implements Database_Configuration, Schema_Login,
 			e.printStackTrace();
 		}
 	}
+	
+	public void insertPromotion(String[] promotion)
+	{
+		String sql;
+
+		sql = "INSERT INTO " + PROMOTION_TABLENAME + "(" + PROMOTION_STRING
+				+ ")" + " VALUES" + "(?)";
+
+		try
+		{
+			DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+
+			preparedStatement = connection.prepareStatement(sql);
+			preparedStatement.setString(1, promotion[0]);
+			preparedStatement.executeUpdate();
+		} catch (SQLException e)
+		{
+			e.printStackTrace();
+		}
+	}
 
 	/**
 	 * Executes an update using the provided sql string.
@@ -756,6 +791,32 @@ public class DatabaseEntity implements Database_Configuration, Schema_Login,
 		{
 			e.printStackTrace();
 		}
+	}
+
+	public Vector<Promotion> getAllPromotions()
+	{
+		// TODO Auto-generated method stub
+		String sql;
+		Vector<Promotion> result = new Vector<Promotion>();
+
+		try
+		{
+			sql = "SELECT * FROM " + PROMOTION_TABLENAME + ";";
+			preparedStatement = connection.prepareStatement(sql);
+			ResultSet resultSet = preparedStatement.executeQuery();
+
+			while (resultSet.next())
+			{
+				result.add(new Promotion(
+						resultSet.getInt(1),
+						resultSet.getString(2)));
+			}
+		} catch (SQLException e)
+		{
+			e.printStackTrace();
+		}
+		
+		return result;
 	}
 
 	public Vector<Document> getSearch(String docName)

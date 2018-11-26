@@ -1,6 +1,9 @@
 package controller;
 
 import java.util.ArrayList;
+import java.util.Vector;
+
+import backend.database.shared.Promotion;
 
 class RegisteredBuyer
 {
@@ -16,4 +19,13 @@ class RegisteredBuyer
 		
 	}
 
+	public void setPromotionsList(Vector<Promotion> myPromotionList)
+	{
+		myController.setPromotionsList(myPromotionList);
+	}
+
+	public RegisteredBuyerController getRegisteredBuyerController()
+	{
+		return myController;
+	}
 }
