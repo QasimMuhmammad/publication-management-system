@@ -252,7 +252,8 @@ public class DatabaseEntity implements Database_Configuration, Schema_Login,
 						(java.sql.Date) magazine.getLastModifiedDate());
 				preparedStatement.setString(5, magazine.getFileExtension());
 				preparedStatement.setInt(6, magazine.getIssueId());
-				preparedStatement.setInt(7, magazine.getDocumentId());
+				preparedStatement.setDouble(7, magazine.getPrice());
+				preparedStatement.setInt(8, magazine.getDocumentId());
 				preparedStatement.executeUpdate();
 			} catch (SQLException e)
 			{
