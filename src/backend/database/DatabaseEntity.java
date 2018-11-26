@@ -143,6 +143,7 @@ public class DatabaseEntity implements Database_Configuration, Schema_Login,
 						(java.sql.Date) magazine.getLastModifiedDate());
 				preparedStatement.setString(5, magazine.getFileExtension());
 				preparedStatement.setInt(6, magazine.getIssueId());
+				preparedStatement.setDouble(7, magazine.getPrice());
 				preparedStatement.executeUpdate();
 			} catch (SQLException e)
 			{
@@ -179,8 +180,8 @@ public class DatabaseEntity implements Database_Configuration, Schema_Login,
 				preparedStatement.setDate(4, 
 						(Date) journal.getLastModifiedDate());
 				preparedStatement.setString(5, journal.getFileExtension());
-				preparedStatement.setDouble(6, journal.getPrice());
-				preparedStatement.setInt(7, journal.getDocumentId());
+				preparedStatement.setInt(6, journal.getDocumentId());
+				preparedStatement.setDouble(7, journal.getPrice());
 				preparedStatement.executeUpdate();
 			} catch (SQLException e)
 			{
