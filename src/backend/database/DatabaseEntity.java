@@ -164,7 +164,8 @@ public class DatabaseEntity implements Database_Configuration, Schema_Login,
 					+ DOCUMENT_CREATION_DATE + "=?, "
 					+ DOCUMENT_LAST_MODIFIED_DATE + "=?, "
 					+ DOCUMENT_FILE_EXTENSION + "=?, "
-					+ DOCUMENT_PRICE + "=?;";
+					+ DOCUMENT_PRICE + "=?;"
+					+ " WHERE " + DOCUMENT_ID + "=?l";
 			
 			try
 			{
@@ -177,6 +178,7 @@ public class DatabaseEntity implements Database_Configuration, Schema_Login,
 						(Date) journal.getLastModifiedDate());
 				preparedStatement.setString(5, journal.getFileExtension());
 				preparedStatement.setDouble(6, journal.getPrice());
+				preparedStatement.setInt(7, journal.getDocumentId());
 				preparedStatement.executeUpdate();
 			} catch (SQLException e)
 			{
