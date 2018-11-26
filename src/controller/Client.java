@@ -10,6 +10,7 @@ import java.net.Socket;
 public class Client
 {
 	Socket clientSocket;
+	Socket notifications;
 	
 	/** Initializes server and client connection
 	 * @param servername Name of the server

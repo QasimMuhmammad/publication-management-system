@@ -291,8 +291,8 @@ public class ServerControl implements Runnable
 			{
 				// TODO: Add a logout command to unregister a user when they
 				// log out.
-				observer = new ConcreteRegisteredBuyerObserver(promotionList,
-						socket);
+//				observer = new ConcreteRegisteredBuyerObserver(promotionList,
+//						socket);
 
 				outputMessage.writeObject(databaseEntity.getAllPromotions());
 				outputMessage.flush();

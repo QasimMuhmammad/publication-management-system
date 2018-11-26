@@ -18,7 +18,15 @@ public class ConcreteRegisteredBuyerObserver implements RegisteredBuyerObserver
 	{
 		
 		p.register(this);
-		thePromotionList = new Vector<Promotion>();
+		try
+		{
+			objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
+		} catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+//		thePromotionList = new Vector<Promotion>();
 		this.update(p.getPromotionList());
 	}
 	
@@ -29,18 +37,18 @@ public class ConcreteRegisteredBuyerObserver implements RegisteredBuyerObserver
 		notification();
 	}
 	
-	public void notification()
+	private void notification()
 	{
-//		try
-//		{
-//			objectOutputStream.writeObject(new String("UPDATE PROMOTION"));
-//			objectOutputStream.writeObject(thePromotionList);
-//			objectOutputStream.flush();
-//		} catch (IOException e)
-//		{
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+		try
+		{
+			objectOutputStream.writeObject(thePromotionList);
+			objectOutputStream.flush();
+			objectOutputStream.reset();
+		} catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		// TODO: Display notification on GUI
 	}
 }
