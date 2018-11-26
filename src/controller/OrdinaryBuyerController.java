@@ -50,6 +50,7 @@ public class OrdinaryBuyerController
 	
 	void initializeViews(OrdinaryBuyerView myView)
 	{
+		myClient.myWriter.flush();
 		myClient.myWriter.println("INITIALIZE DOCUMENTS");
 		receiveDocumentObject(myView);
 		
@@ -121,10 +122,10 @@ public class OrdinaryBuyerController
 
 					case LOGIN_USERS.LOGIN_USER_REGISTERED_BUYER:
 						System.out.println("Successful Login!, Registered User");
-						myViews.dispose();
+						Vector<Promotion> myP=(Vector<Promotion>) myClient.myInputStream.readObject();
 						RegisteredBuyer myRegisteredBuyer = new RegisteredBuyer(user, pass, myClient, myOrders);
-						myRegisteredBuyer.setPromotionsList((Vector<Promotion>) myClient.myInputStream.readObject());
-						
+						myViews.dispose();
+						myRegisteredBuyer.setPromotionsList(myP);
 						System.out.println("ReceeekjjehjjekrhjrqeSKLDJsdkjdkemsmdcccdkks");
 						break;
 					case "Operator":

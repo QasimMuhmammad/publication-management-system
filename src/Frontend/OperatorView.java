@@ -25,7 +25,7 @@ import javax.swing.JComboBox;
 import java.awt.event.ActionListener;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.sql.Date;
 import java.util.Objects;
 import java.util.Vector;
 import java.awt.event.ActionEvent;
@@ -279,8 +279,8 @@ public class OperatorView extends Views
 	    	int docID = Integer.valueOf(id.getText());
 	    	String ti = title.getText();
 	    	String au = author.getText();
-	    	Date create = new Date();
-	    	Date modify = new Date();
+	    	Date create = new Date(0, 1, 2);
+	    	Date modify = new Date(0,1,2);
 	    	String extension = fileExtension.getText();
 	    	Double pDouble = Double.valueOf(Price.getText());
 	    	
@@ -409,8 +409,8 @@ public class OperatorView extends Views
 	    	id.setEditable(false);
 	    	String ti = title.getText();
 	    	String au = author.getText();
-	    	Date create = new Date();
-	    	Date modify = new Date();
+	    	Date create = new Date(0, 1, 2);
+	    	Date modify = new Date(0,1,2);
 	    	String extension = fileExtension.getText();
 	    	Double pDouble = Double.valueOf(Price.getText());
 	    	int issueID = Integer.valueOf(issue.getText());
@@ -606,8 +606,8 @@ public class OperatorView extends Views
 	    	int docID = Integer.valueOf(id.getText());
 	    	String ti = title.getText();
 	    	String au = author.getText();
-	    	Date create = new Date();
-	    	Date modify = new Date();
+	    	Date create = new Date(0, 1, 2);
+	    	Date modify = new Date(0,1,2);
 	    	String extension = fileExtension.getText();
 	    	Double pDouble = Double.valueOf(Price.getText());
 	    	String gen = Genre.getText();

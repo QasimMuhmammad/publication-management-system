@@ -98,6 +98,11 @@ public class ServerControl implements Runnable
 			try
 			{	String intialCommand = fromClient.readLine();
 				System.out.println("Initial Command is " + intialCommand);
+				if(intialCommand.charAt(0) == 'y')
+				{	System.out.println("RANDOM FUCKING Y");
+					intialCommand = intialCommand.substring(1, intialCommand.length());
+				}
+				
 				if (intialCommand.equals("Incoming Message"))
 				{
 					String command = fromClient.readLine();
@@ -112,10 +117,7 @@ public class ServerControl implements Runnable
 						System.out.println("REGISTER ATTEMPT");
 						handleRegistration();
 						break;
-					case "UNSUBSCRIBE":
-						System.out.println("UNSUBSCRIBE ATTEMPT");
-						handleUnsubscribe();
-						break;
+					
 					case "LOGOUT":
 						handleLogout();
 						break;
@@ -134,9 +136,22 @@ public class ServerControl implements Runnable
 				{
 					handleSearch();
 				}
+				else if( intialCommand.equals("UNSUBSCRIBE"))
+				{
+				System.out.println("UNSUBSCRIBE ATTEMPT");
+				handleUnsubscribe();
+				}
 				else if(intialCommand.equals("Operator Remove"))
 				{
 					handleOperatorRemove();
+				}
+				else if(intialCommand.equals("Operator Add"))
+				{
+					handleOperatorAdd();
+				}
+				else if(intialCommand.equals("Operator Modify"))
+				{
+					handleOperatorModify();
 				}
 
 				else
@@ -154,6 +169,44 @@ public class ServerControl implements Runnable
 			}
 		}
 }
+
+	private void handleOperatorModify()
+	{
+		try
+		{
+			Document received = (Document) inputMessage.readObject();
+			databaseEntity.modifyDocument(received);
+			
+		} catch (ClassNotFoundException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+
+	private void handleOperatorAdd()
+	{
+		try
+		{
+			Document received = (Document) inputMessage.readObject();
+			databaseEntity.addDocument(received);
+			
+		} catch (ClassNotFoundException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
 
 	private void handleUnsubscribe()
 	{
@@ -195,7 +248,7 @@ public class ServerControl implements Runnable
 		try
 		{
 			String[] toRemove = fromClient.readLine().split(",");
-			databaseController.removeDocument(toRemove);
+			databaseEntity.removeDocument(toRemove);
 
 		} catch (IOException e)
 		{
@@ -221,9 +274,8 @@ public class ServerControl implements Runnable
 			System.out.println("Sending back " + type);
 			outputMessage.flush();
 			outputMessage.reset();
-
 			outputMessage.writeObject(type);
-
+			
 			if (type.equals(LOGIN_USERS.LOGIN_USER_REGISTERED_BUYER))
 			{
 				// TODO: Add a logout command to unregister a user when they
@@ -236,7 +288,7 @@ public class ServerControl implements Runnable
 				outputMessage.reset();
 
 			}
-
+			 
 
 
 		} catch (IOException e)

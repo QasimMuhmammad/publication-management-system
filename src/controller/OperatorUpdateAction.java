@@ -36,7 +36,8 @@ public class OperatorUpdateAction implements OperatorModifyStrategy
 		
 			if(toAdd != null)
 			{	try
-				{
+				{	
+					System.out.println("Sending a" + toAdd.getType());
 					myClient.myOutputStream.writeObject(toAdd);
 					myClient.myOutputStream.flush();
 					myClient.myOutputStream.reset();

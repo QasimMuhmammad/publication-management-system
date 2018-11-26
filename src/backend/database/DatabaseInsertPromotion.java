@@ -19,7 +19,7 @@ public class DatabaseInsertPromotion implements DatabaseInsertStrategy,
 	}
 	
 	@Override
-	public void insert(String[] promotion)
+	public void insertFromFile(String[] promotion)
 	{
 		String sql;
 		

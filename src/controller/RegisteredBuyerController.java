@@ -18,10 +18,13 @@ public class RegisteredBuyerController extends OrdinaryBuyerController
 		myClient = oldClient;
 		myOrders = myOldOrders;
 		myViews = new RegisteredView(user,pass);
+		System.out.println("constructor 1");
 		BuyerListeners(myViews);
 		RegisteredListeners();
+		System.out.println("constructor 2");
 		NotificationSetup();
 		initializeViews(myViews);
+		System.out.println("constructor 3");
 		myViews.setVisible(true);
 		System.out.println("RB VISIBLE YES:" );
 	}
@@ -34,14 +37,12 @@ public class RegisteredBuyerController extends OrdinaryBuyerController
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				myClient.myWriter.flush();
-				myClient.myWriter.println("Incoming Message");
 				myClient.myWriter.println("UNSUBSCRIBE");
 				myViews.dispose();
 				OrdinaryBuyerController ordinaryBuyerController = new OrdinaryBuyerController();
 				ordinaryBuyerController.setClient(new Client("localhost", 9000));
 				ordinaryBuyerController.setupViews();
-				ordinaryBuyerController.initializeViews();
+				ordinaryBuyerController.initializeViews(myViews);
 				
 			}
 		});
