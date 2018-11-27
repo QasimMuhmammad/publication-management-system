@@ -8,6 +8,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 
 import backend.database.shared.Promotion;
@@ -71,5 +72,11 @@ public class RegisteredView extends OrdinaryBuyerView
 	{
 		Views view = new RegisteredView("Qasim","qazxsw");
 		view.setVisible(true);
+	}
+
+	public void showNotification()
+	{
+		JOptionPane.showConfirmDialog(contentPane, null,"Promotions List notification!",JOptionPane.OK_OPTION);
+		
 	}
 }

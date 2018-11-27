@@ -122,6 +122,7 @@ public class RegisteredBuyerController extends OrdinaryBuyerController
 					{
 						System.out.println("Notification success!");
 						setPromotionsList(promotions);
+						myViews.showNotification();
 					}
 				} catch (ClassNotFoundException e)
 				{

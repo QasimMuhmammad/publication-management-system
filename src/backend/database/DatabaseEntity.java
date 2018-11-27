@@ -940,4 +940,25 @@ public class DatabaseEntity implements Database_Configuration, Schema_Login,
 		
 		
 	}
+
+	public void insertPromotion(Promotion toAdd)
+	{
+		String sql;
+
+		sql = "INSERT INTO " + PROMOTION_TABLENAME + "(" + PROMOTION_STRING
+				+ ")" + " VALUES" + "(?)";
+
+		try
+		{
+			DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+
+			preparedStatement = connection.prepareStatement(sql);
+			preparedStatement.setString(1, toAdd.getPromotionString());
+			preparedStatement.executeUpdate();
+		} catch (SQLException e)
+		{
+			e.printStackTrace();
+		}
+		
+	}
 }

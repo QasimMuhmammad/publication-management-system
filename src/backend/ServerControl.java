@@ -153,7 +153,10 @@ public class ServerControl implements Runnable
 				{
 					handleOperatorModify();
 				}
-
+				else if(intialCommand.equals("Operator Promotion"))
+				{
+					handleOperatorPromotion();
+				}
 				else
 				{
 					System.err.println("Error: What does " + intialCommand + " mean?");
@@ -169,6 +172,24 @@ public class ServerControl implements Runnable
 			}
 		}
 }
+
+	private void handleOperatorPromotion()
+	{
+		try
+		{
+			Promotion toAdd = (Promotion) inputMessage.readObject();
+			databaseEntity.insertPromotion(toAdd);
+			promotionList.addPromotion(toAdd);
+			
+		} catch (ClassNotFoundException e)
+		{
+			e.printStackTrace();
+		} catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+		
+	}
 
 	private void handleOperatorModify()
 	{
@@ -293,7 +314,6 @@ public class ServerControl implements Runnable
 				// log out.
 //				observer = new ConcreteRegisteredBuyerObserver(promotionList,
 //						socket);
-
 				outputMessage.writeObject(databaseEntity.getAllPromotions());
 				outputMessage.flush();
 				outputMessage.reset();

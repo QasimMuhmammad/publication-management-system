@@ -103,8 +103,8 @@ public class Server
 					System.out.println("Registered Client");
 				} catch (SocketTimeoutException e)
 				{
-					System.out.println("Adding a promo");
-					subject.addPromotion(new Promotion(3,"Money"));
+//					System.out.println("Adding a promo");
+//					subject.addPromotion(new Promotion(3,"Money"));
 				} catch (IOException e)
 				{
 					e.printStackTrace();

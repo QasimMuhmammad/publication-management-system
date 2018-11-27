@@ -9,6 +9,7 @@ import javax.swing.DefaultListModel;
 
 import Frontend.OperatorView;
 import backend.database.shared.Document;
+import backend.database.shared.Promotion;
 
 public class OperatorController
 {
@@ -68,6 +69,37 @@ public class OperatorController
 				
 			}
 		});
+	
+		myView.getPromotionButton().addActionListener(new ActionListener()
+		{
+			
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				Promotion toAdd = myView.getNewPromotion();
+				
+				if(toAdd!= null)
+				{
+					
+					myConnection.myWriter.println("Operator Promotion");
+					
+					try
+					{
+						myConnection.myOutputStream.writeObject(toAdd);
+						myConnection.myOutputStream.flush();
+						myConnection.myOutputStream.reset();
+					} catch (IOException e1)
+					{
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					
+					
+				}
+				
+			}
+		});
+	
 	}
 	
 	public void initializeView()

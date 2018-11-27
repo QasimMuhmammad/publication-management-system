@@ -17,6 +17,7 @@ import backend.database.shared.Book;
 import backend.database.shared.Document;
 import backend.database.shared.Journal;
 import backend.database.shared.Magazine;
+import backend.database.shared.Promotion;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -45,10 +46,12 @@ public class OperatorView extends Views
 	private JButton updateButton;
 	private JButton LogoutButton;
 	private JButton addButton;
+	private JButton Promotions;
 	private JList<String> viewingList;
 	private DefaultListModel<String> allDocuments;
 	private JScrollPane documentScroll;
 	private Vector<Document> myDocuments;
+	
 	/**
 	 * Create the frame.
 	 */
@@ -107,6 +110,10 @@ public class OperatorView extends Views
 		JLabel lblNewLabel_1 = new JLabel("Document System Database");
 		lblNewLabel_1.setBounds(127, 31, 176, 16);
 		getContentPane().add(lblNewLabel_1);
+		
+		Promotions = new JButton("Add Promotion");
+		Promotions.setBounds(6, 6, 122, 29);
+		getContentPane().add(Promotions);
 	}
 
 	
@@ -171,7 +178,11 @@ public class OperatorView extends Views
 		return null;
 	}
 
-
+	public JButton getPromotionButton()
+	{
+		return Promotions;
+	}
+	
 	public Journal getJournal(boolean val)
 	{
 		JPanel panel = new JPanel();
@@ -621,4 +632,48 @@ public class OperatorView extends Views
 		return null;
 	}
 
+	public Promotion getNewPromotion()
+	{
+		JPanel panel = new JPanel();
+		panel.setLayout(new GridBagLayout());
+
+		GridBagConstraints constraints = new GridBagConstraints();
+		constraints.insets = new Insets(8, 8, 8, 8);
+		
+		JLabel label;
+		
+		label = new JLabel("Promotion List ID");
+	    constraints.gridx = 0;
+	    constraints.gridy = 0;
+	    panel.add(label, constraints);
+		
+		JTextField id = new JTextField(15);
+		constraints.gridx = 1;
+	    constraints.gridy = 0;
+	    panel.add(id, constraints);
+	    
+	    label = new JLabel("Promotion Content");
+	    constraints.gridx = 0;
+	    constraints.gridy = 1;
+	    panel.add(label, constraints);
+		
+	    JTextField title= new JTextField(15);
+	    constraints.gridx = 1;
+	    constraints.gridy = 1;
+	    panel.add(title, constraints);
+		
+	    Object[] options = {"OK", "CANCEL"};
+	    int result = JOptionPane.showOptionDialog(null, panel, null, JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
+	    
+	    if(result == 0)
+	    {
+	    	int docID = Integer.valueOf(id.getText());
+	    	String ti = title.getText();
+	    	
+	    	Promotion myPromotion = new Promotion(docID, ti);
+	    	return myPromotion;
+	    }
+	    
+		return null;
+	}
 }
